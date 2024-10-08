@@ -15,5 +15,5 @@
 - uuid@10.0.0
 
 ## 備考
-- `link`で別ファイルを読み込む方法
+- `link`で別ファイルを読み込む方法<br>
 [Next.jsでheadタグの中にlinkでスタイルシート指定をする方法](https://naopoyo.com/docs/how-to-specify-a-stylesheet-with-a-link-tag-in-the-head-tag-in-next-js)# reserve-sys
