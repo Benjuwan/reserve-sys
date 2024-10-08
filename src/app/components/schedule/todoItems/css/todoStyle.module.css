@@ -1,19 +1,15 @@
 @charset "utf-8";
 
 .todoForm,
-.todoLists
-.formBtns {
+.todoLists .formBtns {
     font-size: 1.4rem;
     line-height: 1.8;
 }
 
-.todoForm {
-    width: clamp(280px, calc(100vw/2), 320px);
-}
-
 & .todoView {
-    & form {
-        margin: auto;
+    & .today {
+        font-size: 2.4rem;
+        padding-bottom: 1.5em;
     }
 
     & button {
@@ -105,49 +101,32 @@
     &#regiUpdateBtn {
         width: 100%;
     }
-
-    /* calendarStyle.module.css から継承されている */
-    /* appearance: none;
-    border-radius: 4px;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid transparent;
-    cursor: pointer; */
-
-    /* &[disabled] {
-        background-color: #dadada;
-        color: #333;
-        cursor: default;
-    }
-
-    &:not([disabled]):hover {
-        opacity: .75;
-    } */
 }
 
 .todoForm {
-    margin-bottom: 1em;
+    width: clamp(280px, calc(100vw/2), 320px);
+    margin: 0 auto 1em;
+    text-align: left;
 
     & label {
-        margin-right: 1em;
+        display: block;
+        margin-bottom: 1em;
+
+        & span {
+            border-left: 4px solid #333;
+            padding-left: .25em;
+        }
 
         & input {
             font-size: 16px;
             line-height: 2;
-
-            &[type="text"] {
-                width: 100%;
-            }
-
-            &[type="time"] {
-                width: 50%;
-            }
+            width: 100%;
         }
 
         &.timeLabel {
             font-size: clamp(10px, 100%, 14px);
             display: block;
-            margin: .5em 0;
+            margin: 1em 0;
         }
     }
 }
@@ -266,16 +245,10 @@ ul.todoLists {
 
 @media screen and (min-width:1025px) {
     .todoForm {
-        width: 100%;
+        width: clamp(320px, 100%, 560px);
 
         & label {
             margin: 0;
-
-            & input {
-                &[type="time"] {
-                    width: auto;
-                }
-            }
         }
     }
 
@@ -286,6 +259,10 @@ ul.todoLists {
     }
 
     & .todoView {
+        & .today {
+            font-size: 24px;
+        }
+
         & button {
 
             &.openBtn,

@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { TodoForm } from "./TodoForm";
-import { TodoList } from "./TodoList";
-import { isDesktopViewAtom, todoMemoAtom } from "@/app/types/calendar-atom";
+import { todoMemoAtom } from "@/app/types/calendar-atom";
 
 export const Todo = ({ todoID }: { todoID: string }) => {
     const [, setTodoMemo] = useAtom(todoMemoAtom);
-    const [desktopView] = useAtom(isDesktopViewAtom);
 
     // useEffect(() => {
     //     if (isExistDataItems !== null) {
@@ -17,18 +15,8 @@ export const Todo = ({ todoID }: { todoID: string }) => {
     // }, [todoID]);
 
     return (
-        <>
-            {desktopView ?
-                <>
-                    <TodoForm props={{
-                        todoId: todoID
-                    }} />
-                    <TodoList todoID={todoID} />
-                </> :
-                <TodoForm props={{
-                    todoId: todoID
-                }} />
-            }
-        </>
+        <TodoForm props={{
+            todoId: todoID
+        }} />
     );
 }
