@@ -1,16 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import calendarStyle from "./css/calendarStyle.module.css";
-import todoStyle from "../todoItems/css/todoStyle.module.css";
+import { memo, useEffect, useState } from "react";
+import calendarStyle from "./styles/calendarStyle.module.css";
+import todoStyle from "../todoItems/styles/todoStyle.module.css";
 import { calendarItemType } from "./ts/calendarItemType";
 import { useAtom } from "jotai";
 import { isDesktopViewAtom } from "@/app/types/calendar-atom";
-import { PrevNextMonthBtns } from "./PrevNextMonthBtns";
-import { Todo } from "../todoItems/Todo";
-import { TodoList } from "../todoItems/TodoList";
-import { TodoCtrlClosedBtn } from "../todoItems/TodoCtrlClosedBtn";
-import { TodoCtrlOpenBtn } from "../todoItems/TodoCtrlOpenBtn";
+import PrevNextMonthBtns from "./PrevNextMonthBtns";
+import Todo from "../todoItems/Todo";
+import TodoList from "../todoItems/TodoList";
+import TodoCtrlClosedBtn from "../todoItems/TodoCtrlClosedBtn";
+import TodoCtrlOpenBtn from "../todoItems/TodoCtrlOpenBtn";
 import { useGetMonthDays } from "./hooks/useGetMonthDays";
 
 type todaySignal = {
@@ -19,7 +19,7 @@ type todaySignal = {
     today: number;
 }
 
-export const Calendar = () => {
+function Calendar() {
     const { getMonthDays } = useGetMonthDays();
 
     const [, setDesktopView] = useAtom(isDesktopViewAtom);
@@ -93,3 +93,5 @@ export const Calendar = () => {
         </section>
     );
 }
+
+export default memo(Calendar);

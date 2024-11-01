@@ -1,30 +1,25 @@
-import { memo } from "react";
+"use client"
 
-type roomType = { room: string };
-type roomsType = roomType[];
+import { memo } from "react";
+import roomStyle from "./styles/roomstyle.module.css";
+import { useAtom } from "jotai";
+import { roomsAtom } from "@/app/types/rooms-atom";
+import TimeBlocks from "./components/TimeBlocks";
 
 function Rooms() {
-    const roomLists: roomsType = [{ room: '2F' }, { room: '3F' }, { room: '4F' }];
-
-    const begin: number = 9;
-    const end: number = 20;
-    const timeBlocks: number[] = [];
-    for (let i = begin; i <= end; i++) timeBlocks.push(i);
+    const [rooms] = useAtom(roomsAtom);
 
     return (
         <section>
             <h2>Rooms</h2>
-            {roomLists.map((room, i) => (
-                <div>
-                    <p key={i}>{room.room}</p>
-                    <ul style={{ 'display': 'flex', 'listStyle': 'none' }}>
-                        {timeBlocks.map(timeBlock => (
-                            <li key={timeBlock}>,{timeBlock}</li>
-                        ))}
-                    </ul>
+            {rooms.map((room, i) => (
+                <div key={i} className={roomStyle.roomContainer}>
+                    <p>{room.room}</p>
+                    <div className={roomStyle.timeScheduleWrapper}>
+                        <TimeBlocks />
+                    </div>
                 </div>
             ))}
-
         </section>
     );
 }

@@ -108,6 +108,11 @@
     margin: 0 auto 1em;
     text-align: left;
 
+    & select {
+        margin: -1em 0 1em;
+        width: 100%;
+    }
+
     & label {
         display: block;
         margin-bottom: 1em;
@@ -246,15 +251,10 @@ ul.todoLists {
 @media screen and (min-width:1025px) {
     .todoForm {
         width: clamp(320px, 100%, 560px);
-
-        & label {
-            margin: 0;
-        }
     }
 
     .todoForm,
-    .todoLists,
-    .formBtns {
+    .todoLists .formBtns {
         font-size: 14px;
     }
 

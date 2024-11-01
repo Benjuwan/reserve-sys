@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useAtom } from "jotai";
-import { TodoForm } from "./TodoForm";
 import { todoMemoAtom } from "@/app/types/calendar-atom";
+import TodoForm from "./TodoForm";
 
-export const Todo = ({ todoID }: { todoID: string }) => {
+function Todo({ todoID }: { todoID: string }) {
     const [, setTodoMemo] = useAtom(todoMemoAtom);
 
     // useEffect(() => {
@@ -20,3 +20,5 @@ export const Todo = ({ todoID }: { todoID: string }) => {
         }} />
     );
 }
+
+export default memo(Todo);

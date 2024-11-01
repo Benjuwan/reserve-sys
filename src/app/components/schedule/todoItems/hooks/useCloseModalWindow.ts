@@ -1,4 +1,4 @@
-import todoStyle from "../css/todoStyle.module.css";
+import todoStyle from "../styles/todoStyle.module.css";
 
 export const useCloseModalWindow = () => {
     const closeModalWindow: () => void = () => {
