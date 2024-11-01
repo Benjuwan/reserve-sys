@@ -24,6 +24,7 @@ function TodoForm({ props }: { props: TodoFormType }) {
         uuid: todoItem ? todoItem.uuid : '001',
         todoID: todoId ? todoId : todoItem ? todoItem.todoID : '001',
         todoContent: '',
+        rooms: rooms.length > 0 ? rooms[0].room : '',
         startTime: '',
         finishTime: '',
         edit: todoItem ? todoItem.edit : false
