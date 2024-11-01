@@ -1,14 +1,14 @@
-import { SyntheticEvent } from "react";
-import todoStyle from "./css/todoStyle.module.css";
+import { memo, SyntheticEvent } from "react";
+import todoStyle from "./styles/todoStyle.module.css";
 import { todoItemType } from "./ts/todoItemType";
 import { useAtom } from "jotai";
 import { todoMemoAtom } from "@/app/types/calendar-atom";
-import { TodoForm } from "./TodoForm";
+import TodoForm from "./TodoForm";
 import { useDeleteTodoItem } from "./hooks/useDeleteTodoItem";
 import { useCloseModalWindow } from "./hooks/useCloseModalWindow";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
 
-export const TodoItems = ({ todoItem }: { todoItem: todoItemType }) => {
+function TodoItems({ todoItem }: { todoItem: todoItemType }) {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
     const { deleteTodoItem } = useDeleteTodoItem();
@@ -69,6 +69,7 @@ export const TodoItems = ({ todoItem }: { todoItem: todoItemType }) => {
                         <div className={todoStyle.editTargetContent}>
                             <p>--- 現在の予定内容 ---</p>
                             <p>ToDo：{todoItem.todoContent}</p>
+                            {todoItem.rooms && <p>場所：{todoItem.rooms}</p>}
                             {todoItem.startTime && <p>開始時刻：{todoItem.startTime}</p>}
                             {todoItem.finishTime && <p>終了時刻：{todoItem.finishTime}</p>}
                         </div>
@@ -82,3 +83,5 @@ export const TodoItems = ({ todoItem }: { todoItem: todoItemType }) => {
         </div>
     );
 }
+
+export default memo(TodoItems);

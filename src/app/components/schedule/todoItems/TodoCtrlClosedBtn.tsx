@@ -1,9 +1,9 @@
 import { SyntheticEvent, memo } from "react";
-import todoStyle from "./css/todoStyle.module.css";
+import todoStyle from "./styles/todoStyle.module.css";
 import { useViewTodoCtrl } from "./hooks/useViewTodoCtrl";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
 
-export const TodoCtrlClosedBtn = memo(() => {
+function TodoCtrlClosedBtn() {
     const { scrollTop } = useScrollTop();
     const { viewTodoCtrl } = useViewTodoCtrl();
     const handleOpenClosedBtnClicked: (btnEl: HTMLButtonElement) => void = (btnEl: HTMLButtonElement) => {
@@ -16,4 +16,6 @@ export const TodoCtrlClosedBtn = memo(() => {
             <span className="material-symbols-outlined">close</span>
         </button>
     );
-});
+}
+
+export default memo(TodoCtrlClosedBtn);

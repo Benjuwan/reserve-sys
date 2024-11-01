@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
 
 type btnsPropsType = {
@@ -16,7 +17,7 @@ const btnIconStyle: object = {
     'verticalAlign': 'middle'
 }
 
-export const PrevNextMonthBtns = ({ props }: { props: btnsPropsType }) => {
+function PrevNextMonthBtns({ props }: { props: btnsPropsType }) {
     const { className, ctrlMonth, setCtrlMonth, setCtrlYear, ctrlYear } = props;
 
     const { scrollTop } = useScrollTop();
@@ -54,3 +55,5 @@ export const PrevNextMonthBtns = ({ props }: { props: btnsPropsType }) => {
         </div>
     );
 }
+
+export default memo(PrevNextMonthBtns);

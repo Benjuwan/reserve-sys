@@ -1,5 +1,5 @@
 import { SyntheticEvent } from "react";
-import todoStyle from "../css/todoStyle.module.css";
+import todoStyle from "../styles/todoStyle.module.css";
 
 export const useViewTodoCtrl = () => {
     const viewTodoCtrl: (ctrlHandlerElm: HTMLButtonElement | SyntheticEvent<HTMLFormElement>) => void = (

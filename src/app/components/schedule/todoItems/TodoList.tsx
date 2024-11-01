@@ -1,11 +1,11 @@
-import todoStyle from "./css/todoStyle.module.css";
-import { Fragment, SyntheticEvent } from "react";
+import todoStyle from "./styles/todoStyle.module.css";
+import { Fragment, memo, SyntheticEvent } from "react";
 import { useAtom } from "jotai";
 import { isDesktopViewAtom, todoMemoAtom } from "@/app/types/calendar-atom";
-import { TodoItems } from "./TodoItems";
+import TodoItems from "./TodoItems";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
 
-export const TodoList = ({ todoID }: { todoID: string }) => {
+function TodoList({ todoID }: { todoID: string }) {
     const [todoMemo] = useAtom(todoMemoAtom);
     const [desktopView] = useAtom(isDesktopViewAtom);
 
@@ -32,10 +32,16 @@ export const TodoList = ({ todoID }: { todoID: string }) => {
                                     {desktopView ?
                                         <div className={todoStyle.editTargetContent}>
                                             <p className={todoStyle.editTargetStr}>{todoItem.todoContent}</p>
+                                            {todoItem.rooms &&
+                                                <span>{todoItem.rooms}</span>
+                                            }
                                             {todoItem.startTime && <span>開始時刻：{todoItem.startTime}</span>}
                                             {todoItem.finishTime && <span>終了時刻：{todoItem.finishTime}</span>}
                                         </div> :
                                         <p className={todoStyle.isMobileNotice}>
+                                            {todoItem.rooms &&
+                                                <span>{todoItem.rooms}</span>
+                                            }
                                             {todoItem.todoContent.length > 8 ?
                                                 <>{todoItem.todoContent.slice(0, 8)}...</> :
                                                 <>{todoItem.todoContent}</>
@@ -53,3 +59,5 @@ export const TodoList = ({ todoID }: { todoID: string }) => {
         </>
     );
 }
+
+export default memo(TodoList);

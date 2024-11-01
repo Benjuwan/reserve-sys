@@ -1,5 +1,7 @@
-import { ChangeEvent, SyntheticEvent, useMemo, useState } from "react";
-import todoStyle from "./css/todoStyle.module.css";
+import { ChangeEvent, memo, SyntheticEvent, useState } from "react";
+import todoStyle from "./styles/todoStyle.module.css";
+import { useAtom } from "jotai";
+import { roomsAtom } from "@/app/types/rooms-atom";
 import { todoItemType } from "./ts/todoItemType";
 import { useUpdateTodoItem } from "./hooks/useUpdateTodoItem";
 import { useRegiTodoItem } from "./hooks/useRegiTodoItem";
@@ -13,8 +15,10 @@ type TodoFormType = {
     todoId?: string;
 }
 
-export const TodoForm = ({ props }: { props: TodoFormType }) => {
+function TodoForm({ props }: { props: TodoFormType }) {
     const { todoItem, todoId } = props;
+
+    const [rooms] = useAtom(roomsAtom);
 
     const initTodoItems: todoItemType = {
         uuid: todoItem ? todoItem.uuid : '001',
@@ -60,6 +64,16 @@ export const TodoForm = ({ props }: { props: TodoFormType }) => {
         }}>
             <label><span>予定内容</span><input type="text" value={todoItems.todoContent} id="todoContent" onInput={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} />
             </label>
+            {rooms.length > 0 &&
+                <>
+                    <label><span>場所</span></label>
+                    <select name="rooms" id="rooms" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)}>
+                        {rooms.map((room, i) => (
+                            <option key={i} value={room.room}>{room.room}</option>
+                        ))}
+                    </select>
+                </>
+            }
             <div className={todoStyle.timeSchedule}>
                 <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} /></label>
                 <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} /></label>
@@ -84,3 +98,5 @@ export const TodoForm = ({ props }: { props: TodoFormType }) => {
         </form>
     );
 }
+
+export default memo(TodoForm);
