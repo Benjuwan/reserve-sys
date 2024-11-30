@@ -9,6 +9,7 @@ import { useViewTodoCtrl } from "./hooks/useViewTodoCtrl";
 import { useCloseModalWindow } from "./hooks/useCloseModalWindow";
 import { useHandleFormEntries } from "../../../hooks/useHandleFormEntries";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
+import { useCheckTimeBlockEntryForm } from "../../rooms/hooks/useCheckTimeBlockEntryForm";
 
 type TodoFormType = {
     todoItem?: todoItemType;
@@ -37,6 +38,7 @@ function TodoForm({ props }: { props: TodoFormType }) {
     const { scrollTop } = useScrollTop();
     const { closeModalWindow } = useCloseModalWindow();
     const { handleFormEntries } = useHandleFormEntries();
+    const { checkTimeBlockEntryForm } = useCheckTimeBlockEntryForm();
 
     const handleOpenClosedBtnClicked: (ctrlHandlerElm: HTMLButtonElement | SyntheticEvent<HTMLFormElement>) => void = (ctrlHandlerElm: HTMLButtonElement | SyntheticEvent<HTMLFormElement>) => {
         viewTodoCtrl(ctrlHandlerElm);
@@ -76,8 +78,18 @@ function TodoForm({ props }: { props: TodoFormType }) {
                 </>
             }
             <div className={todoStyle.timeSchedule}>
-                <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} /></label>
-                <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} /></label>
+                <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const isValidateTime: boolean = checkTimeBlockEntryForm(e);
+                    if (!isValidateTime) {
+                        handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
+                    }
+                }} /></label>
+                <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const isValidateTime: boolean = checkTimeBlockEntryForm(e);
+                    if (!isValidateTime) {
+                        handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
+                    }
+                }} /></label>
             </div>
             <button className={todoStyle.formBtns} id={todoStyle.regiUpdateBtn} type="button"
                 disabled={isBtnDisabled}
