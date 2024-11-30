@@ -1,10 +1,11 @@
 import { memo } from "react";
 
+export const timeBlockBegin: number = 9;
+export const timeBlockEnd: number = 20;
+
 function TimeBlocks() {
-    const begin: number = 9;
-    const end: number = 20;
     const timeBlocks: number[] = [];
-    for (let i = begin; i <= end; i++) timeBlocks.push(i);
+    for (let i = timeBlockBegin; i <= timeBlockEnd; i++) timeBlocks.push(i);
 
     return (
         <ul style={{ 'display': 'flex', 'listStyle': 'none' }}>
