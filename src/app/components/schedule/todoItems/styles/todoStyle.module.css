@@ -277,7 +277,7 @@ ul.todoLists {
         }
 
         & .todoCtrlElm {
-            padding: calc(100vw/8) 1em;
+            padding: 5em;
         }
     }
 
@@ -290,7 +290,7 @@ ul.todoLists {
             }
 
             & .modalWindow {
-                padding: calc(100vw/8) 1em;
+                padding: 5em;
 
                 & .modalWindowChild {
                     width: clamp(320px, 100%, 560px);
