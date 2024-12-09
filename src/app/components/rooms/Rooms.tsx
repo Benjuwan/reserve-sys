@@ -16,7 +16,7 @@ function Rooms() {
                 <div key={i} className={roomStyle.roomContainer}>
                     <p>{room.room}</p>
                     <div className={roomStyle.timeScheduleWrapper}>
-                        <TimeBlocks />
+                        <TimeBlocks room={room.room} />
                     </div>
                 </div>
             ))}

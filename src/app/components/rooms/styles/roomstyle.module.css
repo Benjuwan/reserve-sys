@@ -29,6 +29,10 @@
             & div {
                 width: 1px;
 
+                &[data-reserved=true] {
+                    background-color: #89e3d5;
+                }
+
                 &:nth-of-type(15n+15) {
                     border-left: 1px dotted #333;
                 }
