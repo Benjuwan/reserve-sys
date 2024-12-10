@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { timeBlockBegin, timeBlockEnd } from "../components/TimeBlocks";
+import { timeBlockBegin, timeBlockEnd } from "../components/TimeTable";
 
 export const useCheckTimeBlockEntryForm = () => {
     const checkTimeBlockEntryForm: (e: ChangeEvent<HTMLInputElement>) => boolean = (e: ChangeEvent<HTMLInputElement>) => {

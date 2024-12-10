@@ -1,7 +1,8 @@
 import { ChangeEvent } from "react";
 
 type handleFormEntriesType = <T>(
-    targetElm: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, targetFormEntries: T,
+    targetElm: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+    targetFormEntries: T,
     setEntries: React.Dispatch<React.SetStateAction<T>>
 ) => void
 
@@ -12,6 +13,7 @@ export const useHandleFormEntries = () => {
         targetFormEntries: T,
         setEntries: React.Dispatch<React.SetStateAction<T>>
     ): void {
+        // id属性からプロパティ名を取得 
         const type: string = targetElm.currentTarget.id;
         let value: string | number | boolean = targetElm.currentTarget.value;
 

@@ -25,10 +25,11 @@ function TodoForm({ props }: { props: TodoFormType }) {
         uuid: todoItem ? todoItem.uuid : '001',
         todoID: todoId ? todoId : todoItem ? todoItem.todoID : '001',
         todoContent: '',
+        edit: todoItem ? todoItem.edit : false,
+        pw: '',
         rooms: rooms.length > 0 ? rooms[0].room : '',
         startTime: '',
-        finishTime: '',
-        edit: todoItem ? todoItem.edit : false
+        finishTime: ''
     }
     const [todoItems, setTodoItems] = useState<todoItemType>(initTodoItems);
 
@@ -91,6 +92,8 @@ function TodoForm({ props }: { props: TodoFormType }) {
                     }
                 }} /></label>
             </div>
+            <label><span>パスワード</span><input type="text" value={todoItems.pw} id="pw" onInput={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} />
+            </label>
             <button className={todoStyle.formBtns} id={todoStyle.regiUpdateBtn} type="button"
                 disabled={isBtnDisabled}
                 onClick={(btnEl: SyntheticEvent<HTMLButtonElement>) => {
