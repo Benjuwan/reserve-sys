@@ -4,7 +4,7 @@ import { memo } from "react";
 import roomStyle from "./styles/roomstyle.module.css";
 import { useAtom } from "jotai";
 import { roomsAtom } from "@/app/types/rooms-atom";
-import TimeBlocks from "./components/TimeBlocks";
+import TimeTable from "./components/TimeTable";
 
 function Rooms() {
     const [rooms] = useAtom(roomsAtom);
@@ -16,7 +16,7 @@ function Rooms() {
                 <div key={i} className={roomStyle.roomContainer}>
                     <p>{room.room}</p>
                     <div className={roomStyle.timeScheduleWrapper}>
-                        <TimeBlocks room={room.room} />
+                        <TimeTable room={room.room} />
                     </div>
                 </div>
             ))}

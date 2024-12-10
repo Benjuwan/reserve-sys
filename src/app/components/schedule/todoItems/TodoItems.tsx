@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent } from "react";
+import { ChangeEvent, memo, SyntheticEvent, useState } from "react";
 import todoStyle from "./styles/todoStyle.module.css";
 import { todoItemType } from "./ts/todoItemType";
 import { useAtom } from "jotai";
@@ -10,6 +10,20 @@ import { useScrollTop } from "@/app/hooks/useScrollTop";
 
 function TodoItems({ todoItem }: { todoItem: todoItemType }) {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
+
+    const [editAble, setEditAble] = useState<boolean>(true);
+
+    const [checkPassword, setCheckPassword] = useState<string>('');
+    const handleCheckPassword: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
+        const checkPasswordStr: string = e.currentTarget.value;
+        setCheckPassword(checkPasswordStr);
+
+        if (checkPasswordStr === todoItem.pw) {
+            alert('パスワードが解除されました');
+            setEditAble(false);
+            setCheckPassword('');
+        }
+    }
 
     const { deleteTodoItem } = useDeleteTodoItem();
     const { closeModalWindow } = useCloseModalWindow();
@@ -29,7 +43,8 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
             uuid: todoItem.uuid,
             todoID: todoItem.todoID,
             todoContent: todoItem.todoContent,
-            edit: editState
+            edit: editState,
+            pw: todoItem.pw
         }
 
         if (todoItem.startTime || todoItem.finishTime) {
@@ -51,6 +66,7 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
                             <p>ToDo：{todoItem.todoContent}</p>
                             {todoItem.startTime && <p>開始時刻：{todoItem.startTime}</p>}
                             {todoItem.finishTime && <p>終了時刻：{todoItem.finishTime}</p>}
+                            {todoItem.pw && <p>登録パスワード：{todoItem.pw}</p>}
                         </div>
                         <TodoForm props={{
                             todoItem: todoItem
@@ -73,9 +89,18 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
                             {todoItem.startTime && <p>開始時刻：{todoItem.startTime}</p>}
                             {todoItem.finishTime && <p>終了時刻：{todoItem.finishTime}</p>}
                         </div>
-                        <button className={`${todoStyle.formBtns} ${todoStyle.editBtn}`} type="button" onClick={() => {
-                            changeMode(todoItem);
-                        }}>編集</button>
+                        {editAble &&
+                            <label><span>パスワード</span><input type="text" value={checkPassword} onInput={handleCheckPassword} />
+                            </label>
+                        }
+                        <button
+                            type="button"
+                            className={`${todoStyle.formBtns} ${todoStyle.editBtn}`}
+                            disabled={editAble}
+                            onClick={() => {
+                                changeMode(todoItem);
+                            }}
+                        >編集</button>
                     </div>
                 }
             </div>
