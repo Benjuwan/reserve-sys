@@ -9,9 +9,14 @@ function TimeBlock({ room, timeBlock }: { room: string, timeBlock: number }) {
     const minBlocks: number[] = [];
     for (let i = 1; i <= 59; i++) minBlocks.push(i);
 
-    // useMemo を使用した動的な予約情報（各部屋ごとのタイムテーブル配列）の取得 
+    const today: string = useMemo(() => `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`, []);
+
+    // useMemo を使用した動的な予約情報（当日限定及び各部屋ごとのタイムテーブル配列）の取得 
     const relevantReservations: todoItemType[] = useMemo(() => {
-        return [...todoMemo].filter(memo => typeof memo.rooms !== 'undefined' && memo.rooms === room);
+        return [...todoMemo].filter(memo =>
+            (memo.todoID === today) &&
+            (typeof memo.rooms !== 'undefined' && memo.rooms === room)
+        );
     }, [todoMemo, room]);
 
     // some 処理によって一つでも true なら true が返却される

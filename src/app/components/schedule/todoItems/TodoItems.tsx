@@ -90,7 +90,7 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
                             {todoItem.finishTime && <p>終了時刻：{todoItem.finishTime}</p>}
                         </div>
                         {editAble &&
-                            <label><span>パスワード</span><input type="text" value={checkPassword} onInput={handleCheckPassword} />
+                            <label className={todoStyle.pwLabel}><span>パスワード</span><input type="text" value={checkPassword} onInput={handleCheckPassword} />
                             </label>
                         }
                         <button
