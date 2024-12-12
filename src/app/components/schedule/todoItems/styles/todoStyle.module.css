@@ -126,6 +126,7 @@
             font-size: 16px;
             line-height: 2;
             width: 100%;
+            padding-left: .25em;
         }
 
         &.timeLabel {
@@ -238,12 +239,27 @@ ul.todoLists {
         }
 
         & .modalWindowOnView {
+            cursor: default;
             opacity: 1;
             visibility: visible;
         }
 
         & .isMobileNotice {
             font-size: clamp(5px, calc(100vw/48), 10px);
+        }
+
+        & .pwLabel {
+            text-align: left;
+            font-weight: bold;
+            width: fit-content;
+            margin: 1em 0;
+            border-left: 4px solid #333;
+            padding-left: 1em;
+
+            & input[type="text"] {
+                display: block;
+                padding-left: .25em;
+            }
         }
     }
 }
