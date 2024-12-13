@@ -52,6 +52,12 @@ function TodoForm({ props }: { props: TodoFormType }) {
         setTimeout(() => scrollTop()); // buttonのクリックイベントでスクロールトップしないので回避策として疑似的な遅延処理
     }
 
+    const handleTimeSchedule: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
+        checkTimeBlockEntryForm(e);
+        checkTimeSchedule(e, todoItems);
+        handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
+    }
+
     const isBtnDisabled: boolean = useMemo(() => {
         const isCheckPw: boolean = todoItems.pw.length === 0;
         const isCheckContent: boolean = todoItems.todoContent.length === 0;
@@ -99,18 +105,10 @@ function TodoForm({ props }: { props: TodoFormType }) {
             {/* タイムテーブル（スケジュール）*/}
             <div className={todoStyle.timeSchedule}>
                 <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    const isValidateTime: boolean = checkTimeBlockEntryForm(e);
-                    if (!isValidateTime) {
-                        handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
-                    }
-                    checkTimeSchedule(e, todoItems)
+                    handleTimeSchedule(e)
                 }} /></label>
                 <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    const isValidateTime: boolean = checkTimeBlockEntryForm(e);
-                    if (!isValidateTime) {
-                        handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
-                    }
-                    checkTimeSchedule(e, todoItems)
+                    handleTimeSchedule(e)
                 }} /></label>
             </div>
 
