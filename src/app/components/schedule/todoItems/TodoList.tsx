@@ -1,5 +1,6 @@
 import todoStyle from "./styles/todoStyle.module.css";
-import { Fragment, memo, SyntheticEvent } from "react";
+import { Fragment, memo, SyntheticEvent, useMemo } from "react";
+import { todoItemType } from "./ts/todoItemType";
 import { useAtom } from "jotai";
 import { isDesktopViewAtom, todoMemoAtom } from "@/app/types/calendar-atom";
 import TodoItems from "./TodoItems";
@@ -17,11 +18,23 @@ function TodoList({ todoID }: { todoID: string }) {
         modalWindow?.classList.add(`${todoStyle.modalWindowOnView}`);
     }
 
+    const sortedTodoMemo: todoItemType[] = useMemo(() => {
+        return [...todoMemo].sort((ahead, behind) => {
+            if (typeof ahead.startTime !== 'undefined' && typeof behind.startTime !== 'undefined') {
+                const aheadStartTime = parseInt(ahead.startTime.split(':')[0]);
+                const behindStartTime = parseInt(behind.startTime.split(':')[0]);
+                return aheadStartTime - behindStartTime;
+            }
+            // else の場合は（0を返して）順序変更なし
+            return 0;
+        });
+    }, [todoMemo]);
+
     return (
         <>
             {todoMemo.length > 0 &&
                 <ul className={todoStyle.todoLists}>
-                    {todoMemo.map(todoItem => (
+                    {sortedTodoMemo.map(todoItem => (
                         <Fragment key={todoItem.uuid}>
                             {/* yyyy/MM/dd が一致した場合 */}
                             {todoItem.todoID === todoID ?

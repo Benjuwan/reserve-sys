@@ -14,7 +14,6 @@ export const useCheckTimeBlockEntryForm = () => {
             const theTime: number = parseInt(targetTime.target.value.replace(':', ''));
 
             const isCheckTimeSchedule: boolean = todoMemo.some(memo => {
-                console.log(memo.todoID, todoItems.todoID);
                 const isMatchDay: boolean = memo.todoID === todoItems.todoID;
 
                 if (
@@ -24,10 +23,8 @@ export const useCheckTimeBlockEntryForm = () => {
                 ) {
                     const isMatchRoom: boolean = typeof todoItems.rooms !== 'undefined' ? memo.rooms === todoItems.rooms : false;
 
-                    console.log(parseInt(memo.startTime?.replace(':', '')), parseInt(memo.finishTime?.replace(':', '')), theTime);
 
                     const isOverlapSchedule: boolean = (parseInt(memo.startTime?.replace(':', '')) <= theTime && parseInt(memo.finishTime?.replace(':', '')) >= theTime);
-                    console.log(isOverlapSchedule);
 
                     // 当日限定かつ 予約室が合致かつ 時間が被っている場合 
                     return isMatchDay && isMatchRoom && isOverlapSchedule;
@@ -40,26 +37,21 @@ export const useCheckTimeBlockEntryForm = () => {
             } else {
                 setBtnDisabledCheckTimeSchedule(false);
             }
+
+            return;
         }
     }
 
-    const checkTimeBlockEntryForm: (e: ChangeEvent<HTMLInputElement>) => boolean = (e: ChangeEvent<HTMLInputElement>) => {
-        let isValidateTime: boolean = false;
-        const idAttrStr: string = e.target.id;
+    const checkTimeBlockEntryForm: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
         const valueStr: string = e.target.value;
-        if (idAttrStr === 'startTime') {
-            if (parseInt(valueStr) < timeBlockBegin) {
-                alert(`「${timeBlockBegin}時」以降の時間帯で指定してください`);
-                isValidateTime = true;
-            }
+        if (parseInt(valueStr) < timeBlockBegin || parseInt(valueStr) > timeBlockEnd) {
+            alert(`「${timeBlockBegin}時〜${timeBlockEnd}」の時間帯で指定してください`);
+            setBtnDisabledCheckTimeSchedule(true);
         } else {
-            if (parseInt(valueStr) > timeBlockEnd) {
-                alert(`「${timeBlockEnd}時」以前の時間帯で指定してください`);
-                isValidateTime = true;
-            }
+            setBtnDisabledCheckTimeSchedule(false);
         }
 
-        return isValidateTime;
+        return;
     }
 
     return { checkTimeBlockEntryForm, checkTimeSchedule, isBtnDisabledCheckTimeSchedule }
