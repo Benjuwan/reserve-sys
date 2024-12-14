@@ -141,6 +141,8 @@ ul.todoLists {
     margin-top: 1em;
     list-style: none;
     padding: 0;
+    max-height: 16rem;
+    overflow-y: auto;
 
     & li {
         display: flex;
@@ -298,6 +300,8 @@ ul.todoLists {
     }
 
     ul.todoLists {
+        max-height: 160px;
+
         & li {
             & .editFalseMode {
                 & .editBtn {

@@ -1,10 +1,25 @@
 import { memo, useEffect } from "react";
+import { todoItemType } from "./ts/todoItemType";
 import { useAtom } from "jotai";
 import { todoMemoAtom } from "@/app/types/calendar-atom";
 import TodoForm from "./TodoForm";
 
 function Todo({ todoID }: { todoID: string }) {
-    const [, setTodoMemo] = useAtom(todoMemoAtom);
+    const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
+
+    useEffect(() => {
+        const thisMonth: number = new Date().getMonth() + 1;
+        const exceptPastTodoMemos: todoItemType[] = [...todoMemo].filter(memo => {
+            const memoDateMonth: number = parseInt(memo.todoID.split('/')[1]);
+            if (memoDateMonth >= thisMonth) {
+                return memo;
+            }
+        });
+        /**
+         * 過去登録分を消すために（一旦 DB を空にして）exceptPastTodoMemos を DB に登録し直す
+        */
+        setTodoMemo(exceptPastTodoMemos);
+    }, []);
 
     // useEffect(() => {
     //     if (isExistDataItems !== null) {

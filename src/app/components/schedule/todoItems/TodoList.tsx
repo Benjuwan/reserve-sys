@@ -32,7 +32,7 @@ function TodoList({ todoID }: { todoID: string }) {
 
     return (
         <>
-            {todoMemo.length > 0 &&
+            {sortedTodoMemo.length > 0 &&
                 <ul className={todoStyle.todoLists}>
                     {sortedTodoMemo.map(todoItem => (
                         <Fragment key={todoItem.uuid}>
@@ -48,8 +48,10 @@ function TodoList({ todoID }: { todoID: string }) {
                                             {todoItem.rooms &&
                                                 <span>{todoItem.rooms}</span>
                                             }
-                                            {todoItem.startTime && <span>開始時刻：{todoItem.startTime}</span>}
-                                            {todoItem.finishTime && <span>終了時刻：{todoItem.finishTime}</span>}
+                                            {(todoItem.startTime && todoItem.finishTime) ?
+                                                <span>{todoItem.startTime} ～ {todoItem.finishTime}</span>
+                                                : null
+                                            }
                                         </div> :
                                         <p className={todoStyle.isMobileNotice}>
                                             {todoItem.rooms &&

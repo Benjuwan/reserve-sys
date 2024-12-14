@@ -1,4 +1,5 @@
 import { ChangeEvent, memo, SyntheticEvent, useMemo, useRef, useState } from "react";
+import { timeBlockBegin, timeBlockEnd } from "../../rooms/components/TimeTable";
 import todoStyle from "./styles/todoStyle.module.css";
 import { useAtom } from "jotai";
 import { roomsAtom } from "@/app/types/rooms-atom";
@@ -49,27 +50,44 @@ function TodoForm({ props }: { props: TodoFormType }) {
 
     const resetStates: () => void = () => {
         setTodoItems((_prevTodoItems) => initTodoItems);
-        setTimeout(() => scrollTop()); // buttonのクリックイベントでスクロールトップしないので回避策として疑似的な遅延処理
+        setTimeout(() => scrollTop()); // button のクリックイベントでスクロールトップしないので回避策として疑似的な遅延処理
     }
 
     const handleTimeSchedule: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
-        checkTimeBlockEntryForm(e);
-        checkTimeSchedule(e, todoItems);
+        const isCheckTimeBlockEntryForm: boolean = checkTimeBlockEntryForm(e);
+        if (isCheckTimeBlockEntryForm) {
+            alert(`「${timeBlockBegin}時〜${timeBlockEnd}」の時間帯で指定してください`);
+            return;
+        }
+
+        const isCheckTimeSchedule: boolean = checkTimeSchedule(e, todoItems);
+        if (isCheckTimeSchedule) {
+            alert('他の方が既に予約済みです');
+            return;
+        }
+
         handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
     }
 
     const isBtnDisabled: boolean = useMemo(() => {
         const isCheckPw: boolean = todoItems.pw.length === 0;
         const isCheckContent: boolean = todoItems.todoContent.length === 0;
-
-        const isCheckStartTime: boolean = typeof todoItems.startTime !== 'undefined' && todoItems.startTime.length === 0;
-        const isCheckFinishTime: boolean = typeof todoItems.finishTime !== 'undefined' && todoItems.finishTime.length === 0;
-        const inCorrectTimeSchedule: boolean = typeof todoItems.startTime !== 'undefined' && typeof todoItems.finishTime !== 'undefined' ?
+        const inCorrectTimeSchedule: boolean = (typeof todoItems.startTime !== 'undefined' && typeof todoItems.finishTime !== 'undefined') ?
             parseInt(todoItems.startTime.replace(':', '')) > parseInt(todoItems.finishTime.replace(':', ''))
             : false;
 
+        if (
+            (typeof todoItems.startTime !== 'undefined' &&
+                checkTimeSchedule(todoItems.startTime, todoItems)) ||
+            (typeof todoItems.finishTime !== 'undefined' &&
+                checkTimeSchedule(todoItems.finishTime, todoItems))
+        ) {
+            alert('他の方が既に予約済みです');
+            return true;
+        }
+
         return isBtnDisabledCheckTimeSchedule || (
-            isCheckPw || isCheckContent || (isCheckStartTime || isCheckFinishTime) || inCorrectTimeSchedule
+            isCheckPw || isCheckContent || inCorrectTimeSchedule
         );
     }, [todoItems]);
 
@@ -104,12 +122,8 @@ function TodoForm({ props }: { props: TodoFormType }) {
 
             {/* タイムテーブル（スケジュール）*/}
             <div className={todoStyle.timeSchedule}>
-                <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    handleTimeSchedule(e)
-                }} /></label>
-                <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    handleTimeSchedule(e)
-                }} /></label>
+                <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => { handleTimeSchedule(e) }} /></label>
+                <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => { handleTimeSchedule(e) }} /></label>
             </div>
 
             {/* パスワード */}
