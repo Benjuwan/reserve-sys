@@ -40,11 +40,8 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
         else editState = false;
 
         const updateTodoList: todoItemType = {
-            uuid: todoItem.uuid,
-            todoID: todoItem.todoID,
-            todoContent: todoItem.todoContent,
-            edit: editState,
-            pw: todoItem.pw
+            ...todoItem,
+            edit: editState
         }
 
         if (todoItem.startTime || todoItem.finishTime) {
@@ -53,6 +50,7 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
         }
 
         const exceptUpdateTodoMemos: todoItemType[] = [...todoMemo].filter(todoMemoItem => todoMemoItem.uuid !== todoItem.uuid);
+
         setTodoMemo((_prevTodoList) => [...exceptUpdateTodoMemos, updateTodoList]);
     }
 
