@@ -1,16 +1,17 @@
-import { ChangeEvent, memo, SyntheticEvent, useMemo, useRef, useState } from "react";
-import { timeBlockBegin, timeBlockEnd } from "../../rooms/components/TimeTable";
+import { ChangeEvent, memo, useRef, useState } from "react";
 import todoStyle from "./styles/todoStyle.module.css";
 import { useAtom } from "jotai";
 import { roomsAtom } from "@/app/types/rooms-atom";
 import { todoItemType } from "./ts/todoItemType";
-import { useUpdateTodoItem } from "./hooks/useUpdateTodoItem";
+import TodoFormItemContent from "./utils/TodoFormItemContent";
+import TodoFormItemRoom from "./utils/TodoFormItemRoom";
+import TodoFormItemTimeSchedule from "./utils/TodoFormItemTimeSchedule";
+import TodoFormItemPassword from "./utils/TodoFormItemPassword";
+import TodoFormItemRegiBtn from "./utils/TodoFormItemRegiBtn";
 import { useRegiTodoItem } from "./hooks/useRegiTodoItem";
-import { useViewTodoCtrl } from "./hooks/useViewTodoCtrl";
-import { useCloseModalWindow } from "./hooks/useCloseModalWindow";
-import { useHandleFormEntries } from "../../../hooks/useHandleFormEntries";
+import { useUpdateTodoItem } from "./hooks/useUpdateTodoItem";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
-import { useCheckTimeBlockEntryForm } from "../../rooms/hooks/useCheckTimeBlockEntryForm";
+import { useHandleFormItems } from "./hooks/useHandleFormItems";
 
 type TodoFormType = {
     todoItem?: todoItemType;
@@ -35,61 +36,15 @@ function TodoForm({ props }: { props: TodoFormType }) {
     }
     const [todoItems, setTodoItems] = useState<todoItemType>(initTodoItems);
 
-    const { updateTodoItem } = useUpdateTodoItem();
     const { regiTodoItem } = useRegiTodoItem();
-    const { viewTodoCtrl } = useViewTodoCtrl();
+    const { updateTodoItem } = useUpdateTodoItem();
     const { scrollTop } = useScrollTop();
-    const { closeModalWindow } = useCloseModalWindow();
-    const { handleFormEntries } = useHandleFormEntries();
-    const { checkTimeBlockEntryForm, checkTimeSchedule, isBtnDisabledCheckTimeSchedule } = useCheckTimeBlockEntryForm();
-
-    const handleOpenClosedBtnClicked: (ctrlHandlerElm: HTMLButtonElement | SyntheticEvent<HTMLFormElement>) => void = (ctrlHandlerElm: HTMLButtonElement | SyntheticEvent<HTMLFormElement>) => {
-        viewTodoCtrl(ctrlHandlerElm);
-        scrollTop();
-    }
+    const { handleOpenClosedBtnClicked } = useHandleFormItems();
 
     const resetStates: () => void = () => {
-        setTodoItems((_prevTodoItems) => initTodoItems);
+        setTodoItems(initTodoItems);
         setTimeout(() => scrollTop()); // button のクリックイベントでスクロールトップしないので回避策として疑似的な遅延処理
     }
-
-    const handleTimeSchedule: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
-        const isCheckTimeBlockEntryForm: boolean = checkTimeBlockEntryForm(e);
-        if (isCheckTimeBlockEntryForm) {
-            alert(`「${timeBlockBegin}時〜${timeBlockEnd}」の時間帯で指定してください`);
-            return;
-        }
-
-        const isCheckTimeSchedule: boolean = checkTimeSchedule(e, todoItems);
-        if (isCheckTimeSchedule) {
-            alert('他の方が既に予約済みです');
-            return;
-        }
-
-        handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
-    }
-
-    const isBtnDisabled: boolean = useMemo(() => {
-        const isCheckPw: boolean = todoItems.pw.length === 0;
-        const isCheckContent: boolean = todoItems.todoContent.length === 0;
-        const inCorrectTimeSchedule: boolean = (typeof todoItems.startTime !== 'undefined' && typeof todoItems.finishTime !== 'undefined') ?
-            parseInt(todoItems.startTime.replace(':', '')) > parseInt(todoItems.finishTime.replace(':', ''))
-            : false;
-
-        if (
-            (typeof todoItems.startTime !== 'undefined' &&
-                checkTimeSchedule(todoItems.startTime, todoItems)) ||
-            (typeof todoItems.finishTime !== 'undefined' &&
-                checkTimeSchedule(todoItems.finishTime, todoItems))
-        ) {
-            alert('他の方が既に予約済みです');
-            return true;
-        }
-
-        return isBtnDisabledCheckTimeSchedule || (
-            isCheckPw || isCheckContent || inCorrectTimeSchedule
-        );
-    }, [todoItems]);
 
     return (
         <form className={todoStyle.todoForm} onSubmit={(formElm: ChangeEvent<HTMLFormElement>) => {
@@ -105,49 +60,19 @@ function TodoForm({ props }: { props: TodoFormType }) {
             resetStates();
         }}>
             {/* 予約内容 */}
-            <label><span>予定内容</span><input type="text" value={todoItems.todoContent} id="todoContent" onInput={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} />
-            </label>
+            <TodoFormItemContent todoItems={todoItems} setTodoItems={setTodoItems} />
 
             {/* 予約室 */}
-            {rooms.length > 0 &&
-                <>
-                    <label><span>場所</span></label>
-                    <select name="rooms" id="rooms" ref={roomRef} onChange={(e: ChangeEvent<HTMLSelectElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)}>
-                        {rooms.map((room, i) => (
-                            <option key={i} value={room.room}>{room.room}</option>
-                        ))}
-                    </select>
-                </>
-            }
+            <TodoFormItemRoom rooms={rooms} todoItems={todoItems} setTodoItems={setTodoItems} roomRef={roomRef} />
 
             {/* タイムテーブル（スケジュール）*/}
-            <div className={todoStyle.timeSchedule}>
-                <label className={todoStyle.timeLabel}><span>開始時刻</span><input id="startTime" type="time" value={todoItems.startTime} onChange={(e: ChangeEvent<HTMLInputElement>) => { handleTimeSchedule(e) }} /></label>
-                <label className={todoStyle.timeLabel}><span>終了時刻</span><input id="finishTime" type="time" value={todoItems.finishTime} onChange={(e: ChangeEvent<HTMLInputElement>) => { handleTimeSchedule(e) }} /></label>
-            </div>
+            <TodoFormItemTimeSchedule todoItems={todoItems} setTodoItems={setTodoItems} />
 
             {/* パスワード */}
-            <label><span>パスワード</span><input type="text" value={todoItems.pw} id="pw" onInput={(e: ChangeEvent<HTMLInputElement>) => handleFormEntries<todoItemType>(e, todoItems, setTodoItems)} />
-            </label>
+            <TodoFormItemPassword todoItems={todoItems} setTodoItems={setTodoItems} />
 
             {/* 登録ボタン */}
-            <button className={todoStyle.formBtns} id={todoStyle.regiUpdateBtn} type="button"
-                disabled={isBtnDisabled}
-                onClick={(btnEl: SyntheticEvent<HTMLButtonElement>) => {
-                    {
-                        !todoItems.edit ?
-                            (
-                                regiTodoItem(todoItems),
-                                handleOpenClosedBtnClicked(btnEl.currentTarget)
-                            ) :
-                            (
-                                btnEl.stopPropagation(), // 親要素のクリックイベント（OnViewModalWindow）発生を防止
-                                updateTodoItem(todoItems),
-                                closeModalWindow()
-                            )
-                    }
-                    resetStates();
-                }}>{!todoItems.edit ? '登録' : '再登録'}</button>
+            <TodoFormItemRegiBtn todoItems={todoItems} resetStates={resetStates} />
         </form>
     );
 }

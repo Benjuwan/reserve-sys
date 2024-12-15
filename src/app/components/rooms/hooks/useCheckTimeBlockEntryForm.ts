@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { timeBlockBegin, timeBlockEnd } from "../components/TimeTable";
 import { todoItemType } from "../../schedule/todoItems/ts/todoItemType";
 import { useAtom } from "jotai";
@@ -6,8 +6,6 @@ import { todoMemoAtom } from "@/app/types/calendar-atom";
 
 export const useCheckTimeBlockEntryForm = () => {
     const [todoMemo] = useAtom(todoMemoAtom);
-
-    const [isBtnDisabledCheckTimeSchedule, setBtnDisabledCheckTimeSchedule] = useState<boolean>(false);
 
     const checkTimeSchedule: (targetTime: ChangeEvent<HTMLInputElement> | string, todoItems: todoItemType) => boolean = (targetTime: ChangeEvent<HTMLInputElement> | string, todoItems: todoItemType) => {
         const theTime: number = typeof targetTime !== 'string' ?
@@ -32,27 +30,15 @@ export const useCheckTimeBlockEntryForm = () => {
             }
         });
 
-        if (isCheckTimeSchedule) {
-            setBtnDisabledCheckTimeSchedule(true);
-        } else {
-            setBtnDisabledCheckTimeSchedule(false);
-        }
-
         return isCheckTimeSchedule;
     }
 
     const checkTimeBlockEntryForm: (e: ChangeEvent<HTMLInputElement>) => boolean = (e: ChangeEvent<HTMLInputElement>) => {
         const valueStr: string = e.target.value;
-
         const isNoReservationTime: boolean = parseInt(valueStr) < timeBlockBegin || parseInt(valueStr) >= timeBlockEnd;
-        if (isNoReservationTime) {
-            setBtnDisabledCheckTimeSchedule(true);
-        } else {
-            setBtnDisabledCheckTimeSchedule(false);
-        }
 
         return isNoReservationTime;
     }
 
-    return { checkTimeBlockEntryForm, checkTimeSchedule, isBtnDisabledCheckTimeSchedule }
+    return { checkTimeBlockEntryForm, checkTimeSchedule }
 }
