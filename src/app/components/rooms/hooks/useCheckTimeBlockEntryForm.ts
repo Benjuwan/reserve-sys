@@ -16,6 +16,7 @@ export const useCheckTimeBlockEntryForm = () => {
             const isMatchDay: boolean = memo.todoID === todoItems.todoID;
 
             if (
+                // memo.edit &&
                 typeof memo.rooms !== 'undefined' &&
                 typeof memo.startTime !== 'undefined' &&
                 typeof memo.finishTime !== 'undefined'

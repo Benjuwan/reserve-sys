@@ -1,9 +1,9 @@
 import { atom } from "jotai";
-import { roomType } from "../components/rooms/ts/roomsType";
+import { roomsType } from "../components/rooms/ts/roomsType";
 
-const rooms: roomType[] = [
+const rooms: roomsType = [
     { room: '2F' },
     { room: '3F' },
     { room: '4F' }
 ];
-export const roomsAtom = atom<roomType[]>(rooms);
+export const roomsAtom = atom<roomsType>(rooms);
