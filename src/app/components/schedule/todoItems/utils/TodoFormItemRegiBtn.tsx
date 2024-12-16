@@ -1,22 +1,21 @@
 import todoStyle from "../styles/todoStyle.module.css";
 import { memo, SyntheticEvent, useMemo } from "react";
 import { todoItemType } from "../ts/todoItemType";
-import { useCheckTimeBlockEntryForm } from "@/app/components/rooms/hooks/useCheckTimeBlockEntryForm";
 import { useCloseModalWindow } from "../hooks/useCloseModalWindow";
 import { useRegiTodoItem } from "../hooks/useRegiTodoItem";
 import { useUpdateTodoItem } from "../hooks/useUpdateTodoItem";
 import { useHandleFormItems } from "../hooks/useHandleFormItems";
+import { useCheckTimeBlockEntryForm } from "@/app/components/rooms/hooks/useCheckTimeBlockEntryForm";
 
 function TodoFormItemRegiBtn({ todoItems, resetStates }: {
     todoItems: todoItemType,
     resetStates: () => void
 }) {
-    const { checkTimeSchedule } = useCheckTimeBlockEntryForm();
-
     const { closeModalWindow } = useCloseModalWindow();
     const { regiTodoItem } = useRegiTodoItem();
     const { updateTodoItem } = useUpdateTodoItem();
     const { handleOpenClosedBtnClicked } = useHandleFormItems();
+    const { checkTimeSchedule } = useCheckTimeBlockEntryForm();
 
     const isBtnDisabled: boolean = useMemo(() => {
         const isCheckPw: boolean = todoItems.pw.length === 0;
@@ -31,7 +30,7 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
             (typeof todoItems.finishTime !== 'undefined' &&
                 checkTimeSchedule(todoItems.finishTime, todoItems))
         ) {
-            alert('他の方が既に予約済みです');
+            alert('他の方が既に予約済みです | TFI-RegiBtn');
             return true;
         }
 
@@ -39,7 +38,8 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
     }, [todoItems]);
 
     return (
-        <button className={todoStyle.formBtns} id={todoStyle.regiUpdateBtn} type="button"
+        <button className={todoStyle.formBtns} id={todoStyle.regiUpdateBtn}
+            type="button"
             disabled={isBtnDisabled}
             onClick={(btnEl: SyntheticEvent<HTMLButtonElement>) => {
                 {

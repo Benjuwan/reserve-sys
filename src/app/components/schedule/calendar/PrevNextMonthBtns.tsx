@@ -22,7 +22,7 @@ function PrevNextMonthBtns({ props }: { props: btnsPropsType }) {
 
     const { scrollTop } = useScrollTop();
 
-    const nextCalendarView = () => {
+    const nextCalendarView: () => void = () => {
         if (ctrlMonth === 12) {
             setCtrlYear((_prevCtrlYear) => ctrlYear + 1);
             setCtrlMonth((_prevCtrlMonth) => 1);
@@ -33,7 +33,7 @@ function PrevNextMonthBtns({ props }: { props: btnsPropsType }) {
         scrollTop();
     }
 
-    const prevCalendarView = () => {
+    const prevCalendarView: () => void = () => {
         if (ctrlMonth === 1) {
             setCtrlYear((_prevCtrlYear) => ctrlYear - 1);
             setCtrlMonth((_prevCtrlMonth) => 12);
