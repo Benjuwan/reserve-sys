@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
-import { timeBlockBegin, timeBlockEnd } from "../components/TimeTable";
-import { todoItemType } from "../../schedule/todoItems/ts/todoItemType";
+import { timeBlockBegin, timeBlockEnd } from "@/app/types/rooms-atom";
+import { todoItemType } from "../ts/todoItemType";
 import { useAtom } from "jotai";
 import { todoMemoAtom } from "@/app/types/calendar-atom";
 

@@ -17,6 +17,7 @@ function TimeBlock({ room, timeBlock }: { room: string, timeBlock: number }) {
             (memo.todoID === today) &&
             (typeof memo.rooms !== 'undefined' && memo.rooms === room)
         );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [todoMemo, room]);
 
     // some 処理によって一つでも true なら true が返却される

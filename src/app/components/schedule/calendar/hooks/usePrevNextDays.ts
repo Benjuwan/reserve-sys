@@ -2,15 +2,16 @@ import { calendarItemType } from "../ts/calendarItemType";
 import { useGetCalndarItem } from "./useGetCalendarItem";
 
 export const usePrevNextDays = () => {
-    const prevNextDays = (
+    const { getCalendarItem } = useGetCalndarItem();
+
+    const prevNextDays: (year: number, month: number, dayDateBox: calendarItemType[]) => calendarItemType[] = (
         year: number,
         month: number,
         dayDateBox: calendarItemType[],
     ) => {
-        const { getCalendarItem } = useGetCalndarItem();
-
         const targetPrevDays: calendarItemType[] = [];
         const targetNextDays: calendarItemType[] = [];
+
         [...dayDateBox].forEach((day, i) => {
             /* 次月関連の処理 */
             if (i === dayDateBox.length - 1) {
@@ -41,6 +42,7 @@ export const usePrevNextDays = () => {
         });
 
         const theCalendar: calendarItemType[] = [...targetPrevDays, ...dayDateBox, ...targetNextDays];
+
         return theCalendar
     }
 

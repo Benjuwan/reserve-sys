@@ -7,7 +7,7 @@ export const useDeleteTodoItem = () => {
 
     const deleteTodoItem: (uuid: string) => void = (uuid: string) => {
         const exceptRemoveTodoItems: todoItemType[] = [...todoMemo].filter(todoItem => todoItem.uuid !== uuid);
-        setTodoMemo((_prevTodoList) => exceptRemoveTodoItems);
+        setTodoMemo(exceptRemoveTodoItems);
     }
 
     return { deleteTodoItem }

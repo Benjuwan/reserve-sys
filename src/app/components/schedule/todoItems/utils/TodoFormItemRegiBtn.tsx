@@ -5,7 +5,7 @@ import { useCloseModalWindow } from "../hooks/useCloseModalWindow";
 import { useRegiTodoItem } from "../hooks/useRegiTodoItem";
 import { useUpdateTodoItem } from "../hooks/useUpdateTodoItem";
 import { useHandleFormItems } from "../hooks/useHandleFormItems";
-import { useCheckTimeBlockEntryForm } from "@/app/components/rooms/hooks/useCheckTimeBlockEntryForm";
+import { useCheckTimeBlockEntryForm } from "@/app/components/schedule/todoItems/hooks/useCheckTimeBlockEntryForm";
 
 function TodoFormItemRegiBtn({ todoItems, resetStates }: {
     todoItems: todoItemType,
@@ -35,6 +35,8 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
         }
 
         return isCheckPw || isCheckContent || inCorrectTimeSchedule;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [todoItems]);
 
     return (
@@ -42,17 +44,13 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
             type="button"
             disabled={isBtnDisabled}
             onClick={(btnEl: SyntheticEvent<HTMLButtonElement>) => {
-                {
-                    !todoItems.edit ?
-                        (
-                            regiTodoItem(todoItems),
-                            handleOpenClosedBtnClicked(btnEl.currentTarget)
-                        ) :
-                        (
-                            btnEl.stopPropagation(), // 親要素のクリックイベント（OnViewModalWindow）発生を防止
-                            updateTodoItem(todoItems),
-                            closeModalWindow()
-                        )
+                if (!todoItems.edit) {
+                    regiTodoItem(todoItems);
+                    handleOpenClosedBtnClicked(btnEl.currentTarget);
+                } else {
+                    btnEl.stopPropagation(); // 親要素のクリックイベント（OnViewModalWindow）発生を防止
+                    updateTodoItem(todoItems);
+                    closeModalWindow();
                 }
                 resetStates();
             }}>{!todoItems.edit ? '登録' : '再登録'}</button>
