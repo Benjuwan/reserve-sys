@@ -24,10 +24,10 @@ function PrevNextMonthBtns({ props }: { props: btnsPropsType }) {
 
     const nextCalendarView: () => void = () => {
         if (ctrlMonth === 12) {
-            setCtrlYear((_prevCtrlYear) => ctrlYear + 1);
-            setCtrlMonth((_prevCtrlMonth) => 1);
+            setCtrlYear(ctrlYear + 1);
+            setCtrlMonth(1);
         } else {
-            setCtrlMonth((_prevCtrlMonth) => ctrlMonth + 1);
+            setCtrlMonth(ctrlMonth + 1);
         }
 
         scrollTop();
@@ -35,10 +35,10 @@ function PrevNextMonthBtns({ props }: { props: btnsPropsType }) {
 
     const prevCalendarView: () => void = () => {
         if (ctrlMonth === 1) {
-            setCtrlYear((_prevCtrlYear) => ctrlYear - 1);
-            setCtrlMonth((_prevCtrlMonth) => 12);
+            setCtrlYear(ctrlYear - 1);
+            setCtrlMonth(12);
         } else {
-            setCtrlMonth((_prevCtrlMonth) => ctrlMonth - 1);
+            setCtrlMonth(ctrlMonth - 1);
         }
 
         scrollTop();

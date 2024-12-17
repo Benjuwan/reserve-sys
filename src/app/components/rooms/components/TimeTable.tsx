@@ -1,9 +1,7 @@
 import roomStyle from "../styles/roomstyle.module.css";
 import { memo } from "react";
+import { timeBlockBegin, timeBlockEnd } from "@/app/types/rooms-atom";
 import TimeBlock from "./TimeBlock";
-
-export const timeBlockBegin: number = 9;
-export const timeBlockEnd: number = 20;
 
 function TimeTable({ room }: { room: string }) {
     const timeBlocks: number[] = [];

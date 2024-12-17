@@ -16,8 +16,8 @@ export const useUpdateTodoItem = () => {
         // shallowCopy.splice(index, 1, updateTodoList); // splice（切取＆置換）した結果ではなく「処理結果の残り分（shallowCopy）を更新関数に渡す」ので「変数への代入」を行わず、shallowCopy を以下の setter 関数に渡している。
 
         if (updateTodoList.todoContent.length > 0) {
-            // setTodoMemo((_prevTodoMemo) => shallowCopy);
-            setTodoMemo((_prevTodoMemo) => [...exceptRemoveTodoItems, updateTodoList]);
+            // setTodoMemo(shallowCopy);
+            setTodoMemo([...exceptRemoveTodoItems, updateTodoList]);
         }
     }
 

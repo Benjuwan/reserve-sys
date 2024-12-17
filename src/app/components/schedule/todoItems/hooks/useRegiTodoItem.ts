@@ -17,7 +17,7 @@ export const useRegiTodoItem = () => {
         }
 
         if (shallowCopyTodoItems.todoContent.length > 0) {
-            setTodoMemo((_prevTodoMemo) => [...todoMemo, newTodoList]);
+            setTodoMemo([...todoMemo, newTodoList]);
         }
     }
 

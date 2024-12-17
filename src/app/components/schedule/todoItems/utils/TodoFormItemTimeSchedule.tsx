@@ -1,9 +1,9 @@
 import todoStyle from "../styles/todoStyle.module.css";
 import { ChangeEvent, Dispatch, memo, SetStateAction } from "react";
-import { timeBlockBegin, timeBlockEnd } from "@/app/components/rooms/components/TimeTable";
+import { timeBlockBegin, timeBlockEnd } from "@/app/types/rooms-atom";
 import { todoItemType } from "../ts/todoItemType";
 import { useHandleFormEntries } from "@/app/hooks/useHandleFormEntries";
-import { useCheckTimeBlockEntryForm } from "@/app/components/rooms/hooks/useCheckTimeBlockEntryForm";
+import { useCheckTimeBlockEntryForm } from "@/app/components/schedule/todoItems/hooks/useCheckTimeBlockEntryForm";
 
 function TodoFormItemTimeSchedule({ todoItems, setTodoItems }: {
     todoItems: todoItemType,
@@ -15,7 +15,7 @@ function TodoFormItemTimeSchedule({ todoItems, setTodoItems }: {
     const handleTimeSchedule: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
         const isCheckTimeBlockEntryForm: boolean = checkTimeBlockEntryForm(e);
         if (isCheckTimeBlockEntryForm) {
-            alert(`「${timeBlockBegin}時〜${timeBlockEnd}」の時間帯で指定してください`);
+            alert(`「${timeBlockBegin}時〜${timeBlockEnd}時」の時間帯で指定してください`);
             return;
         }
 

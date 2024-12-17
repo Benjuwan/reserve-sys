@@ -49,13 +49,11 @@ function TodoForm({ props }: { props: TodoFormType }) {
     return (
         <form className={todoStyle.todoForm} onSubmit={(formElm: ChangeEvent<HTMLFormElement>) => {
             formElm.preventDefault();
-            {
-                !todoItems.edit ?
-                    (
-                        regiTodoItem(todoItems),
-                        handleOpenClosedBtnClicked(formElm)
-                    ) :
-                    updateTodoItem(todoItems)
+            if (!todoItems.edit) {
+                regiTodoItem(todoItems);
+                handleOpenClosedBtnClicked(formElm);
+            } else {
+                updateTodoItem(todoItems);
             }
             resetStates();
         }}>

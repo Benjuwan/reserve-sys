@@ -15,13 +15,13 @@ export const useHandleFormEntries = () => {
     ): void {
         // id属性からプロパティ名を取得 
         const type: string = targetElm.currentTarget.id;
-        let value: string | number | boolean = targetElm.currentTarget.value;
+        const value: string | number | boolean = targetElm.currentTarget.value;
 
         const newEntries: T = {
             ...targetFormEntries,
             [type]: value
         }
-        setEntries((_prevEntries) => newEntries);
+        setEntries(newEntries);
     }
 
     return { handleFormEntries }

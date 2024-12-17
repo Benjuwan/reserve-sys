@@ -37,21 +37,25 @@ function Calendar() {
             thisMonth: new Date().getMonth() + 1,
             today: new Date().getDate()
         }
-        setCtrlToday((_prevCtrlToday) => today);
+        setCtrlToday(today);
 
         if (window.matchMedia("(min-width: 1025px)").matches) setDesktopView(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const jumpThisMonth: () => void = () => {
         const thisYear: number = new Date().getFullYear();
         const thisMonth: number = new Date().getMonth() + 1;
-        setCtrlYear((_prevCtrlYear) => thisYear);
-        setCtrlMonth((_prevCtrlMonth) => thisMonth);
+        setCtrlYear(thisYear);
+        setCtrlMonth(thisMonth);
         getMonthDays(thisYear, thisMonth, setDays);
         window.scrollTo(0, 0);
     }
 
-    useEffect(() => getMonthDays(ctrlYear, ctrlMonth, setDays), [ctrlMonth]);
+    useEffect(() => {
+        getMonthDays(ctrlYear, ctrlMonth, setDays);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ctrlMonth]);
 
     return (
         <section className={calendarStyle.wrapper}>

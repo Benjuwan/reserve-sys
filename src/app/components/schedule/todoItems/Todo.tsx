@@ -19,6 +19,7 @@ function Todo({ todoID }: { todoID: string }) {
          * 過去登録分を消すために（一旦 DB を空にして）exceptPastTodoMemos を DB に登録し直す
         */
         setTodoMemo(exceptPastTodoMemos);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // useEffect(() => {
