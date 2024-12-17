@@ -16,13 +16,17 @@ export const useCheckTimeBlockEntryForm = () => {
             const isMatchDay: boolean = memo.todoID === todoItems.todoID;
 
             if (
-                // memo.edit &&
                 typeof memo.rooms !== 'undefined' &&
                 typeof memo.startTime !== 'undefined' &&
                 typeof memo.finishTime !== 'undefined'
             ) {
                 const isMatchRoom: boolean = typeof todoItems.rooms !== 'undefined' ? memo.rooms === todoItems.rooms : false;
 
+                // 自身が登録した予約時間は検証対象外（編集時の回避措置）
+                const isSelf_allowOverlapSchedule: boolean = (todoItems.uuid === memo.uuid) && (parseInt(memo.startTime.replace(':', '')) <= theTime && parseInt(memo.finishTime.replace(':', '')) >= theTime);
+                if (isSelf_allowOverlapSchedule) {
+                    return false;
+                }
 
                 const isOverlapSchedule: boolean = (parseInt(memo.startTime?.replace(':', '')) <= theTime && parseInt(memo.finishTime?.replace(':', '')) >= theTime);
 
