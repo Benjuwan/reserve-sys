@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import calendarStyle from "./styles/calendarStyle.module.css";
 import todoStyle from "../todoItems/styles/todoStyle.module.css";
 import { calendarItemType } from "./ts/calendarItemType";
@@ -39,7 +39,10 @@ function Calendar() {
         }
         setCtrlToday(today);
 
-        if (window.matchMedia("(min-width: 1025px)").matches) setDesktopView(true);
+        if (window.matchMedia("(min-width: 1025px)").matches) {
+            setDesktopView(true);
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -56,6 +59,17 @@ function Calendar() {
         getMonthDays(ctrlYear, ctrlMonth, setDays);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ctrlMonth]);
+
+    const date: Date = new Date();
+    const present: number = useMemo(() => {
+        return parseInt(`${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const isNotPastDays: (day: calendarItemType) => boolean = (day: calendarItemType) => {
+        const dayDate: number = parseInt(`${day.year}${day.month.toString().padStart(2, '0')}${day.day.toString().padStart(2, '0')}`);
+        return dayDate >= present;
+    }
 
     return (
         <section className={calendarStyle.wrapper}>
@@ -82,11 +96,13 @@ function Calendar() {
                         <p>{day.dayDate}</p>
                         {day.signalPrevNextMonth ? null :
                             <div className={`${todoStyle.todoView}`}>
-                                <TodoCtrlOpenBtn />
+                                {isNotPastDays(day) &&
+                                    <TodoCtrlOpenBtn day={day} />
+                                }
                                 <div className={`${todoStyle.todoCtrlElm}`}>
                                     <TodoCtrlClosedBtn />
                                     <p className={todoStyle.today}>{day.month}/{day.day}（{day.dayDate}）</p>
-                                    <Todo todoID={`${day.year}/${day.month}/${day.day}`} />
+                                    <Todo todoID={`${day.year}/${day.month}/${day.day}`} present={present} />
                                 </div>
                                 <TodoList todoID={`${day.year}/${day.month}/${day.day}`} />
                             </div>

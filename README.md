@@ -15,10 +15,7 @@
 - typescript@5.6.2
 - uuid@10.0.0
 
-## ToDoFix
-- `src/app/components/schedule/todoItems/Todo.tsx`<br>過去登録分を消すために（一旦 DB を空にして）`exceptPastTodoMemos` を DB に登録し直す
-
-## 内部ファイルのデータフェッチ（を行う場合）
+## 各部屋データ（内部ファイル）のデータフェッチ（を行う場合）
 - `public`dir をプロジェクトファイル直下に用意し、そのファイル内にフェッチ用データを置く
 ```
 - public
@@ -84,7 +81,7 @@ export const usePrevNextDays = () => {
         month: number,
         dayDateBox: calendarItemType[],
     ) => {
-+        // NG：カスタムフック内でカスタムフックを呼び出してしまっている
+-        // NG：カスタムフック内でカスタムフックを呼び出してしまっている
 -        const { getCalendarItem } = useGetCalndarItem();
     ...
     ..
