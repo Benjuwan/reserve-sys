@@ -4,14 +4,13 @@ import { useAtom } from "jotai";
 import { todoMemoAtom } from "@/app/types/calendar-atom";
 import TodoForm from "./TodoForm";
 
-function Todo({ todoID }: { todoID: string }) {
+function Todo({ todoID, present }: { todoID: string, present: number }) {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
     useEffect(() => {
-        const thisMonth: number = new Date().getMonth() + 1;
         const exceptPastTodoMemos: todoItemType[] = [...todoMemo].filter(memo => {
-            const memoDateMonth: number = parseInt(memo.todoID.split('/')[1]);
-            if (memoDateMonth >= thisMonth) {
+            const memoDate: number = parseInt(memo.todoID.replaceAll('/', ''));
+            if (memoDate >= present) {
                 return memo;
             }
         });
@@ -21,14 +20,6 @@ function Todo({ todoID }: { todoID: string }) {
         setTodoMemo(exceptPastTodoMemos);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // useEffect(() => {
-    //     if (isExistDataItems !== null) {
-    //         setTodoMemo((_prevTodoList) => [...isExistDataItems]);
-    //     } else {
-    //         setTodoMemo((_prevTodoList) => []); // 前月や次月に移動するたびに ToDo メモを初期化
-    //     }
-    // }, [todoID]);
 
     return (
         <TodoForm props={{

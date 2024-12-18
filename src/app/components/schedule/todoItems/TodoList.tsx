@@ -21,8 +21,8 @@ function TodoList({ todoID }: { todoID: string }) {
     const sortedTodoMemo: todoItemType[] = useMemo(() => {
         return [...todoMemo].sort((ahead, behind) => {
             if (typeof ahead.startTime !== 'undefined' && typeof behind.startTime !== 'undefined') {
-                const aheadStartTime = parseInt(ahead.startTime.split(':')[0]);
-                const behindStartTime = parseInt(behind.startTime.split(':')[0]);
+                const aheadStartTime = parseInt(ahead.startTime.replace(':', ''));
+                const behindStartTime = parseInt(behind.startTime.replace(':', ''));
                 return aheadStartTime - behindStartTime;
             }
             // else の場合は（0を返して）順序変更なし
@@ -46,22 +46,22 @@ function TodoList({ todoID }: { todoID: string }) {
                                         <div className={todoStyle.editTargetContent}>
                                             <p className={todoStyle.editTargetStr}>{todoItem.todoContent}</p>
                                             {todoItem.rooms &&
-                                                <span>{todoItem.rooms}</span>
+                                                <span>［{todoItem.rooms}］</span>
                                             }
                                             {(todoItem.startTime && todoItem.finishTime) ?
                                                 <span>{todoItem.startTime} ～ {todoItem.finishTime}</span>
                                                 : null
                                             }
                                         </div> :
-                                        <p className={todoStyle.isMobileNotice}>
+                                        <div className={todoStyle.isMobileNotice}>
                                             {todoItem.rooms &&
-                                                <span>{todoItem.rooms}</span>
+                                                <p>［{todoItem.rooms}］</p>
                                             }
                                             {todoItem.todoContent.length > 8 ?
-                                                <>{todoItem.todoContent.slice(0, 8)}...</> :
-                                                <>{todoItem.todoContent}</>
+                                                <p>{todoItem.todoContent.slice(0, 8)}...</p> :
+                                                <p>{todoItem.todoContent}</p>
                                             }
-                                        </p>
+                                        </div>
                                     }
                                     <TodoItems todoItem={todoItem} />
                                 </li>
