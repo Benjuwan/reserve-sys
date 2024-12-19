@@ -5,7 +5,7 @@ import TimeBlock from "./TimeBlock";
 
 function TimeTable({ room }: { room: string }) {
     const timeBlocks: number[] = [];
-    for (let i = timeBlockBegin; i <= timeBlockEnd; i++) timeBlocks.push(i);
+    for (let i = timeBlockBegin; i < timeBlockEnd; i++) timeBlocks.push(i);
 
     return (
         <ul>
