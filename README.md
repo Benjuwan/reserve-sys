@@ -3,15 +3,15 @@
 
 ## 技術構成
 - @types/node@20.16.11
-- @types/react-dom@18.3.0
-- @types/react@18.3.11
+- @types/react-dom@19.0.2 overridden
+- @types/react@19.0.1 overridden
 - @types/uuid@10.0.0
-- eslint-config-next@14.2.14
+- eslint-config-next@15.1.1
 - eslint@8.57.1
 - jotai@2.10.0
-- next@14.2.14
-- react-dom@18.3.1
-- react@18.3.1
+- next@15.1.1
+- react-dom@19.0.0
+- react@19.0.0
 - typescript@5.6.2
 - uuid@10.0.0
 

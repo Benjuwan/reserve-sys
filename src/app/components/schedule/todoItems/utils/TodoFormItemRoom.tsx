@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, LegacyRef, memo, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, Ref, memo, SetStateAction } from "react";
 import { todoItemType } from "../ts/todoItemType";
 import { roomsType } from "@/app/components/rooms/ts/roomsType";
 import { useHandleFormEntries } from "@/app/hooks/useHandleFormEntries";
@@ -7,7 +7,7 @@ function TodoFormItemRoom({ rooms, todoItems, setTodoItems, roomRef }: {
     rooms: roomsType,
     todoItems: todoItemType,
     setTodoItems: Dispatch<SetStateAction<todoItemType>>,
-    roomRef: LegacyRef<HTMLSelectElement> | undefined
+    roomRef: Ref<HTMLSelectElement> | undefined
 }) {
     const { handleFormEntries } = useHandleFormEntries();
 
