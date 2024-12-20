@@ -84,6 +84,7 @@ model Reservation {
   - データベースのスキーマ定義
   - モデルの定義
 
+### `prisma`設定
 - `src/lib/prisma.ts`
   - `Prisma`クライアントのシングルトンインスタンスを管理
   - グローバルな状態での`Prisma`クライアントの再利用を確保
@@ -107,7 +108,8 @@ export const prisma = globalForPrisma.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 ```
 
-- `src/app/api/reservations/route.ts`（`Route Handler`）
+### `Route Handler`
+- `src/app/api/reservations/route.ts`
   - CRUD操作のためのAPIエンドポイント
   - POST, PUT, DELETEメソッドの実装
 

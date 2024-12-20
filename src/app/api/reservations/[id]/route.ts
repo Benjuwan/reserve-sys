@@ -7,9 +7,8 @@ export async function PUT(request: Request) {
     const data: todoItemType = await request.json();
 
     const id: string = request.url.split('/reservations/')[1];
-    console.log(data, id);
     if (!id) {
-        return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     const reservation = await prisma.reservation.update({
@@ -34,14 +33,14 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
     const id: string = request.url.split('/reservations/')[1];
     if (!id) {
-        return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+        return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     await prisma.reservation.delete({
         where: {
             id: id,
         },
-    })
+    });
 
     return NextResponse.json({ message: 'Deleted successfully' });
 }
