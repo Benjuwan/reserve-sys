@@ -7,7 +7,7 @@ export const useUpdateTodoItem = () => {
 
     /* データベース（SQLite）の当該予約を更新 */
     const updateReservation: (data: todoItemType) => Promise<todoItemType> = async (data: todoItemType) => {
-        const response = await fetch('/api/reservations', {
+        const response = await fetch(`/api/reservations/${data.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,8 +26,10 @@ export const useUpdateTodoItem = () => {
         if (updateTodoList.todoContent.length > 0) {
             updateReservation(updateTodoList);
             setTodoMemo([...exceptRemoveTodoItems, updateTodoList]);
+            location.reload();
+            // setTimeout(() => location.reload());
         }
     }
 
-    return { updateTodoItem, updateReservation }
+    return { updateTodoItem }
 }

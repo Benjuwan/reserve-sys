@@ -32,6 +32,7 @@ function TodoItemsEditable({ props }: { props: TodoItemsEditableTypes }) {
             <div className={todoStyle.editTargetContent}>
                 <p>◯ 編集前 ---</p>
                 <p>予約内容：{todoItem.todoContent}</p>
+                {todoItem.rooms && <p>場所：{todoItem.rooms}</p>}
                 {todoItem.startTime && <p>開始時刻：{todoItem.startTime}</p>}
                 {todoItem.finishTime && <p>終了時刻：{todoItem.finishTime}</p>}
                 {todoItem.pw && <p>登録パスワード：{todoItem.pw}</p>}
