@@ -42,7 +42,7 @@ function TodoItemsEditable({ props }: { props: TodoItemsEditableTypes }) {
             <div className={todoStyle.editerIntoCtrlBtns}>
                 <button id={todoStyle["deleteBtn"]} className={todoStyle.formBtns} type="button" onClick={(deleteBtn: SyntheticEvent<HTMLButtonElement>) => {
                     handleCloseModalWindowBtnClicked(deleteBtn);
-                    deleteTodoItem(todoItem.uuid);
+                    deleteTodoItem(todoItem.id);
                 }}>削除</button>
                 <button className={`${todoStyle.formBtns} ${todoStyle.editBtn}`} type="button" onClick={() => {
                     changeMode(todoItem);

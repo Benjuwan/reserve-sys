@@ -25,7 +25,7 @@ function TodoForm({ props }: { props: TodoFormType }) {
     const roomRef = useRef<null | HTMLSelectElement>(null);
 
     const initTodoItems: todoItemType = {
-        uuid: todoItem ? todoItem.uuid : '001',
+        id: todoItem ? todoItem.id : '001',
         todoID: todoId ? todoId : todoItem ? todoItem.todoID : '001',
         todoContent: '',
         edit: todoItem ? todoItem.edit : false,
