@@ -22,7 +22,7 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
             updateTodoList.finishTime = todoItem.finishTime;
         }
 
-        const exceptUpdateTodoMemos: todoItemType[] = [...todoMemo].filter(todoMemoItem => todoMemoItem.uuid !== todoItem.uuid);
+        const exceptUpdateTodoMemos: todoItemType[] = [...todoMemo].filter(todoMemoItem => todoMemoItem.id !== todoItem.id);
 
         setTodoMemo([...exceptUpdateTodoMemos, updateTodoList]);
     }

@@ -35,7 +35,7 @@ function TodoList({ todoID }: { todoID: string }) {
             {sortedTodoMemo.length > 0 &&
                 <ul className={todoStyle.todoLists}>
                     {sortedTodoMemo.map(todoItem => (
-                        <Fragment key={todoItem.uuid}>
+                        <Fragment key={todoItem.id}>
                             {/* yyyy/MM/dd が一致した場合 */}
                             {todoItem.todoID === todoID ?
                                 <li onClick={(liElm: SyntheticEvent<HTMLLIElement>) => {
