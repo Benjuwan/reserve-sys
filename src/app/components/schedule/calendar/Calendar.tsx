@@ -2,45 +2,53 @@
 
 import { memo, useEffect, useMemo, useState } from "react";
 import calendarStyle from "./styles/calendarStyle.module.css";
-import todoStyle from "../todoItems/styles/todoStyle.module.css";
 import { calendarItemType } from "./ts/calendarItemType";
+import { todoItemType } from "../todoItems/ts/todoItemType";
 import { useAtom } from "jotai";
-import { isDesktopViewAtom } from "@/app/types/calendar-atom";
-import PrevNextMonthBtns from "./PrevNextMonthBtns";
-import Todo from "../todoItems/Todo";
-import TodoList from "../todoItems/TodoList";
-import TodoCtrlClosedBtn from "../todoItems/TodoCtrlClosedBtn";
-import TodoCtrlOpenBtn from "../todoItems/TodoCtrlOpenBtn";
+import { fetchTodoMemoAtom, isDesktopViewAtom, todoMemoAtom } from "@/app/types/calendar-atom";
+import PrevNextMonthBtns from "./components/PrevNextMonthBtns";
 import { useGetMonthDays } from "./hooks/useGetMonthDays";
-
-type todaySignal = {
-    thisYear: number;
-    thisMonth: number;
-    today: number;
-}
+import { useDeleteTodoItem } from "../todoItems/hooks/useDeleteTodoItem";
+import DaysList from "./components/DaysList";
 
 function Calendar() {
-    const { getMonthDays } = useGetMonthDays();
-
     const [, setDesktopView] = useAtom(isDesktopViewAtom);
+    const [fetchTodoMemo] = useAtom(fetchTodoMemoAtom);
+    const [, setTodoMemo] = useAtom(todoMemoAtom);
+
+    const { getMonthDays } = useGetMonthDays();
+    const { deleteReservation } = useDeleteTodoItem();
 
     const currYear = new Date().getFullYear();
     const currMonth = new Date().getMonth() + 1;
     const [ctrlYear, setCtrlYear] = useState<number>(currYear);
     const [ctrlMonth, setCtrlMonth] = useState<number>(currMonth);
     const [days, setDays] = useState<calendarItemType[]>([]);
-    const [ctrlToday, setCtrlToday] = useState<todaySignal | null>(null);
+
+    const date: Date = new Date();
+    const present: number = useMemo(() => {
+        return parseInt(`${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
-        const today: todaySignal = {
-            thisYear: new Date().getFullYear(),
-            thisMonth: new Date().getMonth() + 1,
-            today: new Date().getDate()
-        }
-        setCtrlToday(today);
-
         if (window.matchMedia("(min-width: 1025px)").matches) {
             setDesktopView(true);
+        }
+
+        if (fetchTodoMemo.length > 0) {
+            const exceptPastTodoMemos: todoItemType[] = [...fetchTodoMemo].filter(memo => {
+                const memoDate: number = parseInt(memo.todoID.replaceAll('/', ''));
+                if (memoDate >= present) {
+                    return memo;
+                } else {
+                    /* 過去分はDBから削除 */
+                    deleteReservation(memo.id);
+                }
+            });
+
+            /* 当日以降の予定のみスケジュールとして管理・把握 */
+            setTodoMemo(exceptPastTodoMemos);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,17 +68,6 @@ function Calendar() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ctrlMonth]);
 
-    const date: Date = new Date();
-    const present: number = useMemo(() => {
-        return parseInt(`${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const isNotPastDays: (day: calendarItemType) => boolean = (day: calendarItemType) => {
-        const dayDate: number = parseInt(`${day.year}${day.month.toString().padStart(2, '0')}${day.day.toString().padStart(2, '0')}`);
-        return dayDate >= present;
-    }
-
     return (
         <section className={calendarStyle.wrapper}>
             <h2>{ctrlYear}年{ctrlMonth}月</h2>
@@ -83,32 +80,10 @@ function Calendar() {
             }} />
             <button id={calendarStyle["jumpThisMonth"]} type="button" onClick={jumpThisMonth}>今月に移動</button>
             <ul className={calendarStyle.calendar}>
-                {days.map(day => (
-                    // カスタムデータ属性の指定は low-case でないと React から怒られる
-                    <li key={`${day.year}/${day.month}/${day.day}`} data-daydate={day.dayDateNum} className={
-                        (ctrlToday?.thisYear === day.year && ctrlToday.thisMonth === day.month && ctrlToday.today === day.day) ?
-                            `${calendarStyle.todaySignal} ${calendarStyle.calendarLists}` :
-                            `${calendarStyle.calendarLists}`
-                    }>
-                        <p>
-                            {day.signalPrevNextMonth && <span>{day.month}/</span>}{day.day}
-                        </p>
-                        <p>{day.dayDate}</p>
-                        {day.signalPrevNextMonth ? null :
-                            <div className={`${todoStyle.todoView}`}>
-                                {isNotPastDays(day) &&
-                                    <TodoCtrlOpenBtn day={day} />
-                                }
-                                <div className={`${todoStyle.todoCtrlElm}`}>
-                                    <TodoCtrlClosedBtn />
-                                    <p className={todoStyle.today}>{day.month}/{day.day}（{day.dayDate}）</p>
-                                    <Todo todoID={`${day.year}/${day.month}/${day.day}`} present={present} />
-                                </div>
-                                <TodoList todoID={`${day.year}/${day.month}/${day.day}`} />
-                            </div>
-                        }
-                    </li>
-                ))}
+                <DaysList props={{
+                    days: days,
+                    present: present
+                }} />
             </ul>
         </section>
     );

@@ -6,7 +6,7 @@ export const useUpdateTodoItem = () => {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
     /* データベース（SQLite）の当該予約を更新 */
-    const updateReservation = async (data: todoItemType) => {
+    const updateReservation: (data: todoItemType) => Promise<todoItemType> = async (data: todoItemType) => {
         const response = await fetch('/api/reservations', {
             method: 'PUT',
             headers: {
@@ -24,10 +24,10 @@ export const useUpdateTodoItem = () => {
         const exceptRemoveTodoItems: todoItemType[] = [...todoMemo].filter(todoItem => todoItem.id !== updateTodoList.id); // 今回更新（削除）対象の todoItem 以外を返す
 
         if (updateTodoList.todoContent.length > 0) {
-            setTodoMemo([...exceptRemoveTodoItems, updateTodoList]);
             updateReservation(updateTodoList);
+            setTodoMemo([...exceptRemoveTodoItems, updateTodoList]);
         }
     }
 
-    return { updateTodoItem }
+    return { updateTodoItem, updateReservation }
 }

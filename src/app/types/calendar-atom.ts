@@ -12,8 +12,11 @@ import { atomWithDefault } from "jotai/utils";
 */
 
 export const fetchTodoMemoAtom = atomWithDefault(async () => {
+    // API_URL： 500 error 対策で環境変数を使用
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
     // GET処理： src/app/api/reservations/route.ts の GET によりDBからのデータを取得 
-    const response: Response = await fetch('/api/reservations', { cache: 'no-store' });
+    const response: Response = await fetch(`${API_URL}api/reservations`, { cache: 'no-store' });
     const resObj: todoItemType[] = await response.json();
     return resObj;
 });

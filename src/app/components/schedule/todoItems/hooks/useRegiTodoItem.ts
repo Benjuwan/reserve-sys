@@ -8,7 +8,7 @@ export const useRegiTodoItem = () => {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
     /* データベース（SQLite）に予約を登録 */
-    const createReservation = async (data: todoItemType) => {
+    const createReservation: (data: todoItemType) => Promise<todoItemType> = async (data: todoItemType) => {
         const response = await fetch('/api/reservations', {
             method: 'POST',
             headers: {
@@ -29,8 +29,8 @@ export const useRegiTodoItem = () => {
         }
 
         if (shallowCopyTodoItems.todoContent.length > 0) {
-            setTodoMemo([...todoMemo, newTodoList]);
             createReservation(newTodoList);
+            setTodoMemo([...todoMemo, newTodoList]);
         }
     }
 

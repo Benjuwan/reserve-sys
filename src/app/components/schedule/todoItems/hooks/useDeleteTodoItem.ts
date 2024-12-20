@@ -6,7 +6,7 @@ export const useDeleteTodoItem = () => {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
     /* データベース（SQLite）から当該予約を削除 */
-    const deleteAction = async (id: string) => {
+    const deleteReservation: (id: string) => Promise<void> = async (id: string) => {
         await fetch(`/api/reservations/${id}`, {
             // delete なので DELETE、データの扱いに関する記述（headers, body, etc...）は不要
             method: "DELETE"
@@ -14,11 +14,10 @@ export const useDeleteTodoItem = () => {
     }
 
     const deleteTodoItem: (id: string) => void = (id: string) => {
-        deleteAction(id);
-
+        deleteReservation(id);
         const exceptRemoveTodoItems: todoItemType[] = [...todoMemo].filter(todoItem => todoItem.id !== id);
         setTodoMemo(exceptRemoveTodoItems);
     }
 
-    return { deleteTodoItem }
+    return { deleteTodoItem, deleteReservation }
 }
