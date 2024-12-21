@@ -193,7 +193,7 @@ body {
 }
 
 .globalWrapper {
-  max-width: 960px;
+  max-width: 96rem;
   padding: 2.5%;
   margin: auto;
 }
@@ -205,5 +205,9 @@ body {
 
   body {
     font-size: 14px;
+  }
+
+  .globalWrapper {
+    max-width: 960px;
   }
 }
