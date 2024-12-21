@@ -1,0 +1,23 @@
+/* 404 page */
+.notFoundPageSec {
+    max-width: 96rem;
+    margin: auto;
+}
+
+.contentWrapper {
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
+/* 404 page */
+
+@media screen and (min-width:1025px) {
+
+    /* 404 page */
+    .notFoundPageSec {
+        max-width: 960px;
+    }
+
+    /* 404 page */
+}

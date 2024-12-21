@@ -15,7 +15,7 @@ generator client {
 
 // データベースのテーブル内容とリンクさせるための設定
 model Reservation {
-  id          String   @id @default(uuid()) // 主キーの指定（UUIDを自動生成）
+  id          String   @id @default(uuid()) // 主キーの指定（UUID）
   todoID      String                        // 日付 (yyyy/mm/d)
   todoContent String                        // 予約内容
   edit        Boolean  @default(false)

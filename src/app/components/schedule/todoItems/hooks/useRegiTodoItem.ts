@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'; // key へ渡すための固有の識別子を生成する npm ライブラリ
-
 import { todoItemType } from "../ts/todoItemType";
 import { useAtom } from "jotai";
 import { todoMemoAtom } from '@/app/types/calendar-atom';
@@ -31,6 +30,7 @@ export const useRegiTodoItem = () => {
         if (shallowCopyTodoItems.todoContent.length > 0) {
             createReservation(newTodoList);
             setTodoMemo([...todoMemo, newTodoList]);
+            location.reload(); // 登録直後に当該内容を更新すると 500エラーになるため再読み込みさせて登録完了させておく 
         }
     }
 

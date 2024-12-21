@@ -13,6 +13,10 @@ export async function POST(request: Request) {
   const data: todoItemType = await request.json();
 
   const reservation = await prisma.reservation.create({
+    /**
+     * POST 操作において id は記述不要
+     * prisma\schema.prisma で主キーとして id（uuid）を指定しているので data 内に記述すると重複処理でエラーとなる 
+    */ 
     data: {
       todoID: data.todoID,
       todoContent: data.todoContent,
