@@ -1,6 +1,7 @@
 import { ChangeEvent, memo, useState } from "react";
 import todoStyle from "../styles/todoStyle.module.css";
 import { todoItemType } from "../ts/todoItemType";
+import { useHandleInputValueSanitize } from "@/app/hooks/useHandleInputValueSanitize";
 
 type TodoItemsEditableTypes = {
     todoItem: todoItemType;
@@ -10,9 +11,12 @@ type TodoItemsEditableTypes = {
 function TodoItemsEditable({ props }: { props: TodoItemsEditableTypes }) {
     const { todoItem, updateTodoMemoEditState } = props;
 
+    const { handleInputValueSanitize } = useHandleInputValueSanitize();
+
     const [checkPassword, setCheckPassword] = useState<string>('');
     const handleCheckPassword: (e: ChangeEvent<HTMLInputElement>) => void = (e: ChangeEvent<HTMLInputElement>) => {
-        const checkPasswordStr: string = e.currentTarget.value;
+        // サニタイズした値をセッター関数（ setCheckPassword ）にセット
+        const checkPasswordStr: string = handleInputValueSanitize(e.currentTarget.value);
         setCheckPassword(checkPasswordStr);
 
         if (checkPasswordStr === todoItem.pw) {

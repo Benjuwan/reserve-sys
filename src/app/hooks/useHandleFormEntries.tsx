@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { useHandleInputValueSanitize } from "./useHandleInputValueSanitize";
 
 type handleFormEntriesType = <T>(
     targetElm: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -7,6 +8,10 @@ type handleFormEntriesType = <T>(
 ) => void
 
 export const useHandleFormEntries = () => {
+    // サニタイズしたいラベルを用意（input の id属性名）
+    const isCheckIdAttr_forSanitize = ['todoContent', 'pw'];
+    const { handleInputValueSanitize } = useHandleInputValueSanitize();
+
     /* <T>：ジェネリクスで任意の型を指定 */
     const handleFormEntries: handleFormEntriesType = function <T>(
         targetElm: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -15,7 +20,12 @@ export const useHandleFormEntries = () => {
     ): void {
         // id属性からプロパティ名を取得 
         const type: string = targetElm.currentTarget.id;
-        const value: string | number | boolean = targetElm.currentTarget.value;
+        let value: string | number | boolean = targetElm.currentTarget.value;
+
+        // サニタイズが必要なラベルには実施
+        if (isCheckIdAttr_forSanitize.includes(type)) {
+            value = handleInputValueSanitize(targetElm.currentTarget.value);
+        }
 
         const newEntries: T = {
             ...targetFormEntries,
