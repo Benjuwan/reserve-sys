@@ -20,6 +20,7 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
     const isBtnDisabled: boolean = useMemo(() => {
         const isCheckPw: boolean = todoItems.pw.length === 0;
         const isCheckContent: boolean = todoItems.todoContent.length === 0;
+
         const inCorrectTimeSchedule: boolean = (typeof todoItems.startTime !== 'undefined' && typeof todoItems.finishTime !== 'undefined') ?
             parseInt(todoItems.startTime.replace(':', '')) > parseInt(todoItems.finishTime.replace(':', ''))
             : false;
@@ -53,7 +54,8 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
                     closeModalWindow();
                 }
                 resetStates();
-            }}>{!todoItems.edit ? '登録' : '再登録'}</button>
+            }}>{!todoItems.edit ? '登録' : '再登録'}
+        </button>
     )
 }
 
