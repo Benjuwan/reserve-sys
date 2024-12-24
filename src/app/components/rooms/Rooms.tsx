@@ -11,7 +11,6 @@ function Rooms() {
 
     return (
         <section>
-            <h2>Reservation Rooms</h2>
             {rooms.map((room, i) => (
                 <div key={i} className={roomStyle.roomContainer}>
                     <p>{room.room}</p>

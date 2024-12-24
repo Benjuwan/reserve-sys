@@ -7,9 +7,11 @@ import TodoItemsEditable from "./utils/TodoItemsEditable";
 import TodoItemsDisEditable from "./utils/TodoItemsDisEditable";
 import { useCloseModalWindow } from "./hooks/useCloseModalWindow";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
+import { useUpdateTodoItem } from "./hooks/useUpdateTodoItem";
 
 function TodoItems({ todoItem }: { todoItem: todoItemType }) {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
+    const { updateReservation } = useUpdateTodoItem();
 
     const updateTodoMemoEditState: (editState: boolean) => void = (editState: boolean) => {
         const updateTodoList: todoItemType = {
@@ -25,6 +27,11 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
         const exceptUpdateTodoMemos: todoItemType[] = [...todoMemo].filter(todoMemoItem => todoMemoItem.id !== todoItem.id);
 
         setTodoMemo([...exceptUpdateTodoMemos, updateTodoList]);
+
+        // 編集画面の[戻る]ボタンを押下してパスワードロックした場合は DB の todoItem.edit を更新
+        if (updateTodoList.edit === false) {
+            updateReservation(updateTodoList);
+        }
     }
 
     const { closeModalWindow } = useCloseModalWindow();

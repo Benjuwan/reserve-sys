@@ -30,5 +30,5 @@ export const useUpdateTodoItem = () => {
         }
     }
 
-    return { updateTodoItem }
+    return { updateTodoItem, updateReservation }
 }

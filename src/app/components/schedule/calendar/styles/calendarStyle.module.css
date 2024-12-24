@@ -53,6 +53,10 @@
         place-content: start;
         border-radius: .4rem;
 
+        & li {
+            min-height: 5em;
+        }
+
         & li.calendarLists {
             padding: .5em;
             align-self: stretch;
@@ -79,6 +83,21 @@
                 margin: 0;
                 line-height: 2;
                 overflow-wrap: anywhere;
+            }
+        }
+
+        & li.theOneWeek{
+            min-height: 2em;
+            display: grid;
+            place-content: center;
+            background-color: #eaeaea;
+            border-right: 1px solid #dadada;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+
+            &:first-of-type{
+                border-left: 1px solid #dadada;
             }
         }
     }
