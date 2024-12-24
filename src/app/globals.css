@@ -209,5 +209,6 @@ body {
 
   .globalWrapper {
     max-width: 960px;
+    padding: 0;
   }
 }

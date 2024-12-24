@@ -51,21 +51,22 @@ function DaysList({ props }: { props: DaysListType }) {
                     <p>
                         {day.signalPrevNextMonth && <span>{day.month}/</span>}{day.day}
                     </p>
-                    <p>{day.dayDate}</p>
                     {day.signalPrevNextMonth ? null :
-                        <div className={`${todoStyle.todoView}`}>
+                        <>
                             {isNotPastDays(day) &&
-                                <TodoCtrlOpenBtn day={day} />
+                                <div className={`${todoStyle.todoView}`}>
+                                    <TodoCtrlOpenBtn day={day} />
+                                    <div className={`${todoStyle.todoCtrlElm}`}>
+                                        <TodoCtrlClosedBtn />
+                                        <p className={todoStyle.today}>{day.month}/{day.day}（{day.dayDate}）</p>
+                                        <TodoForm props={{
+                                            todoId: `${day.year}/${day.month}/${day.day}`
+                                        }} />
+                                    </div>
+                                    <TodoList todoID={`${day.year}/${day.month}/${day.day}`} />
+                                </div>
                             }
-                            <div className={`${todoStyle.todoCtrlElm}`}>
-                                <TodoCtrlClosedBtn />
-                                <p className={todoStyle.today}>{day.month}/{day.day}（{day.dayDate}）</p>
-                                <TodoForm props={{
-                                    todoId: `${day.year}/${day.month}/${day.day}`
-                                }} />
-                            </div>
-                            <TodoList todoID={`${day.year}/${day.month}/${day.day}`} />
-                        </div>
+                        </>
                     }
                 </li>
             ))}

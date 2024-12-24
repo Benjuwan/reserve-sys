@@ -62,21 +62,29 @@
 
 /* minBlocks div の間隔調整のために 560px で指定 */
 @media screen and (min-width: 560px) {
-    .timeScheduleWrapper ul {
-        width: 100%;
+    .timeScheduleWrapper {
+        & ul {
+            width: 100%;
 
-        & li {
-            height: 50px;
+            & li {
+                height: 50px;
 
-            & .minBlocks {
-                & div {
-                    width: 1.25px;
+                & .minBlocks {
+                    & div {
+                        width: 1.25px;
+                    }
                 }
             }
         }
+    }
 
-        .roomContainer p {
-            font-size: 14px;
-        }
+    .roomContainer p {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    .timeScheduleWrapper {
+        overflow-x: unset;
     }
 }

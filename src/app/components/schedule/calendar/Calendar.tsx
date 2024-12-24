@@ -9,6 +9,7 @@ import { fetchTodoMemoAtom, isDesktopViewAtom, todoMemoAtom } from "@/app/types/
 import PrevNextMonthBtns from "./components/PrevNextMonthBtns";
 import { useGetMonthDays } from "./hooks/useGetMonthDays";
 import { useDeleteTodoItem } from "../todoItems/hooks/useDeleteTodoItem";
+import DaydateList from "./components/DaydateList";
 import DaysList from "./components/DaysList";
 
 function Calendar() {
@@ -80,6 +81,7 @@ function Calendar() {
             }} />
             <button id={calendarStyle["jumpThisMonth"]} type="button" onClick={jumpThisMonth}>今月に移動</button>
             <ul className={calendarStyle.calendar}>
+                <DaydateList days={days} />
                 <DaysList props={{
                     days: days,
                     present: present
