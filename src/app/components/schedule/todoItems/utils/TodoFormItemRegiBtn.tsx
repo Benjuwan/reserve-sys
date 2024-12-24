@@ -15,7 +15,7 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
     const { regiTodoItem } = useRegiTodoItem();
     const { updateTodoItem } = useUpdateTodoItem();
     const { handleOpenClosedBtnClicked } = useHandleFormItems();
-    const { checkTimeSchedule } = useCheckTimeBlockEntryForm();
+    const { checkTimeSchedule, checkDuplicateTimeSchedule } = useCheckTimeBlockEntryForm();
 
     const isBtnDisabled: boolean = useMemo(() => {
         const isCheckPw: boolean = todoItems.pw.length === 0;
@@ -45,6 +45,12 @@ function TodoFormItemRegiBtn({ todoItems, resetStates }: {
             type="button"
             disabled={isBtnDisabled}
             onClick={(btnEl: SyntheticEvent<HTMLButtonElement>) => {
+                const isCheckDuplicateTime: boolean = checkDuplicateTimeSchedule(todoItems);
+                if (isCheckDuplicateTime) {
+                    alert('希望予約時間が他の予定と重複しています');
+                    return;
+                }
+
                 if (!todoItems.edit) {
                     regiTodoItem(todoItems);
                     handleOpenClosedBtnClicked(btnEl.currentTarget);

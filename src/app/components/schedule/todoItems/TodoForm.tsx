@@ -12,6 +12,7 @@ import { useRegiTodoItem } from "./hooks/useRegiTodoItem";
 import { useUpdateTodoItem } from "./hooks/useUpdateTodoItem";
 import { useScrollTop } from "@/app/hooks/useScrollTop";
 import { useHandleFormItems } from "./hooks/useHandleFormItems";
+import { useCheckTimeBlockEntryForm } from "./hooks/useCheckTimeBlockEntryForm";
 
 type TodoFormType = {
     todoItem?: todoItemType;
@@ -40,6 +41,7 @@ function TodoForm({ props }: { props: TodoFormType }) {
     const { updateTodoItem } = useUpdateTodoItem();
     const { scrollTop } = useScrollTop();
     const { handleOpenClosedBtnClicked } = useHandleFormItems();
+    const { checkDuplicateTimeSchedule } = useCheckTimeBlockEntryForm();
 
     const resetStates: () => void = () => {
         setTodoItems(initTodoItems);
@@ -49,6 +51,12 @@ function TodoForm({ props }: { props: TodoFormType }) {
     return (
         <form className={todoStyle.todoForm} onSubmit={(formElm: ChangeEvent<HTMLFormElement>) => {
             formElm.preventDefault();
+            const isCheckDuplicateTime: boolean = checkDuplicateTimeSchedule(todoItems);
+            if (isCheckDuplicateTime) {
+                alert('希望予約時間が他の予定と重複しています');
+                return;
+            }
+
             if (!todoItems.edit) {
                 regiTodoItem(todoItems);
                 handleOpenClosedBtnClicked(formElm);
