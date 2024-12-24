@@ -25,6 +25,7 @@ function TodoList({ todoID }: { todoID: string }) {
                 const behindStartTime = parseInt(behind.startTime.replace(':', ''));
                 return aheadStartTime - behindStartTime;
             }
+
             // else の場合は（0を返して）順序変更なし
             return 0;
         });
@@ -44,7 +45,10 @@ function TodoList({ todoID }: { todoID: string }) {
                                 }}>
                                     {desktopView ?
                                         <div className={todoStyle.editTargetContent}>
-                                            <p className={todoStyle.editTargetStr}>{todoItem.todoContent}</p>
+                                            {todoItem.todoContent.length > 6 ?
+                                                <p className={todoStyle.editTargetStr}>{todoItem.todoContent.slice(0, 6)}...</p> :
+                                                <p className={todoStyle.editTargetStr}>{todoItem.todoContent}</p>
+                                            }
                                             {todoItem.rooms &&
                                                 <span>［{todoItem.rooms}］</span>
                                             }
@@ -57,8 +61,8 @@ function TodoList({ todoID }: { todoID: string }) {
                                             {todoItem.rooms &&
                                                 <p>［{todoItem.rooms}］</p>
                                             }
-                                            {todoItem.todoContent.length > 8 ?
-                                                <p>{todoItem.todoContent.slice(0, 8)}...</p> :
+                                            {todoItem.todoContent.length > 6 ?
+                                                <p>{todoItem.todoContent.slice(0, 6)}...</p> :
                                                 <p>{todoItem.todoContent}</p>
                                             }
                                         </div>

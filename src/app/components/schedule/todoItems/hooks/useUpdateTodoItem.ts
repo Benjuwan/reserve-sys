@@ -26,7 +26,6 @@ export const useUpdateTodoItem = () => {
         if (updateTodoList.todoContent.length > 0) {
             updateReservation(updateTodoList);
             setTodoMemo([...exceptRemoveTodoItems, updateTodoList]);
-            location.reload();
         }
     }
 

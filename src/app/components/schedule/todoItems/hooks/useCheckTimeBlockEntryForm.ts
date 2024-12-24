@@ -7,7 +7,21 @@ import { todoMemoAtom } from "@/app/types/calendar-atom";
 export const useCheckTimeBlockEntryForm = () => {
     const [todoMemo] = useAtom(todoMemoAtom);
 
-    const checkTimeSchedule: (targetTime: ChangeEvent<HTMLInputElement> | string, todoItems: todoItemType) => boolean = (targetTime: ChangeEvent<HTMLInputElement> | string, todoItems: todoItemType) => {
+    /* `src/app/types/rooms-atom.ts`で指定した予約受付可能な時間帯かチェック */
+    const checkTimeBlockEntryForm: (e: ChangeEvent<HTMLInputElement>) => boolean = (
+        e: ChangeEvent<HTMLInputElement>
+    ) => {
+        const valueStr: string = e.target.value;
+        const isNoReservationTime: boolean = parseInt(valueStr) < timeBlockBegin || parseInt(valueStr) >= timeBlockEnd;
+
+        return isNoReservationTime;
+    }
+
+    /* 同部屋内・同日での予約時間の重複確認（開始と終了「それぞれ」の予定重複状況をタイムリーにチェック）*/
+    const checkTimeSchedule: (targetTime: ChangeEvent<HTMLInputElement> | string, todoItems: todoItemType) => boolean = (
+        targetTime: ChangeEvent<HTMLInputElement> | string,
+        todoItems: todoItemType
+    ) => {
         const theTime: number = typeof targetTime !== 'string' ?
             parseInt(targetTime.target.value.replace(':', '')) :
             parseInt(targetTime.replace(':', ''));
@@ -38,12 +52,34 @@ export const useCheckTimeBlockEntryForm = () => {
         return isCheckTimeSchedule;
     }
 
-    const checkTimeBlockEntryForm: (e: ChangeEvent<HTMLInputElement>) => boolean = (e: ChangeEvent<HTMLInputElement>) => {
-        const valueStr: string = e.target.value;
-        const isNoReservationTime: boolean = parseInt(valueStr) < timeBlockBegin || parseInt(valueStr) >= timeBlockEnd;
+    /* 同部屋内・同日での予約時間の重複確認（開始〜終了「予約時間全体」を通して他と被っていないか登録時にチェック）*/
+    const checkDuplicateTimeSchedule: (todoItems: todoItemType) => boolean = (
+        todoItems: todoItemType
+    ) => {
+        let isCheckDuplicateTime: boolean = false;
 
-        return isNoReservationTime;
+        for (const memo of todoMemo) {
+            const isMatchRoom: boolean = typeof todoItems.rooms !== 'undefined' ? memo.rooms === todoItems.rooms : false;
+            const isMatchDay: boolean = memo.todoID === todoItems.todoID;
+
+            if (isMatchRoom && isMatchDay) {
+                if (
+                    typeof todoItems.startTime !== 'undefined' &&
+                    typeof todoItems.finishTime !== 'undefined' &&
+                    typeof memo.startTime !== 'undefined' &&
+                    typeof memo.finishTime !== 'undefined'
+                ) {
+                    const theStart: number = parseInt(todoItems.startTime.replace(':', ''));
+                    const compareStart: number = parseInt(memo.startTime.replace(':', ''));
+                    const theFinish: number = parseInt(todoItems.finishTime.replace(':', ''));
+                    const compareFinish: number = parseInt(memo.finishTime.replace(':', ''));
+                    isCheckDuplicateTime = theStart < compareStart && compareFinish < theFinish;
+                }
+            }
+        }
+
+        return isCheckDuplicateTime;
     }
 
-    return { checkTimeBlockEntryForm, checkTimeSchedule }
+    return { checkTimeBlockEntryForm, checkTimeSchedule, checkDuplicateTimeSchedule }
 }
