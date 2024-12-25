@@ -143,6 +143,30 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 npx prisma studio
 ```
 
+### `vercel`デプロイ時に`prisma`起因のエラー
+- `prisma`起因のエラー
+`vercel`の「`Node.js`の依存関係をキャッシュ」する働きによって「古い`Prisma Client`が使用されてしまって」デプロイエラーになっていた。（＝`Prisma Client`の自動生成が正しく実行されていなかった）
+
+```
+Error [PrismaClientInitializationError]: Prisma has detected that this project was built on Vercel, which caches dependencies. This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered. To fix this, make sure to run the `prisma generate` command during the build process.
+```
+
+- 解決策
+`build`時に`prisma generate`で`Prisma Client`を新規制作するように変更した。
+
+```diff
+{
+  "scripts": {
+    "dev": "next dev",
+-   "build": "next build",
++   "build": "prisma generate && next build",
+    ...
+    ..
+    .
+  }
+}
+```
+
 ## 参照
 ### prisma
 - [【Next.js】Prismaを使ってみる](https://www.sddgrp.co.jp/blog/technology/use-next-jsprisma/)
