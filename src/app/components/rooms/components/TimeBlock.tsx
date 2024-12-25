@@ -1,10 +1,14 @@
 import { memo, useMemo } from "react";
 import { todoItemType } from "../../schedule/todoItems/ts/todoItemType";
-import { todoMemoAtom } from "@/app/types/calendar-atom";
-import { useAtom } from "jotai";
 
-function TimeBlock({ room, timeBlock }: { room: string, timeBlock: number }) {
-    const [todoMemo] = useAtom(todoMemoAtom);
+type TimeBlockType = {
+    room: string;
+    timeBlock: number;
+    todoMemo: todoItemType[];
+}
+
+function TimeBlock({ props }: { props: TimeBlockType }) {
+    const { room, timeBlock, todoMemo } = props;
 
     const minBlocks: number[] = [];
     for (let i = 1; i <= 59; i++) minBlocks.push(i);
