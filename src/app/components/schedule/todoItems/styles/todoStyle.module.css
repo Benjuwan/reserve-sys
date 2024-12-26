@@ -242,6 +242,12 @@ ul.todoLists {
                     }
                 }
             }
+
+            & .modalWindowChild_editabel {
+                & div.editTargetContent {
+                    margin-bottom: 4em;
+                }
+            }
         }
 
         & .modalWindowOnView {
@@ -280,7 +286,7 @@ ul.todoLists {
                 place-content: center;
 
                 & .modalWindowChild {
-                    width: 100%;
+                    min-width: 400px;
                     gap: 2em;
 
                     & .editerIntoCtrlBtns {
@@ -304,6 +310,15 @@ ul.todoLists {
                         }
                     }
                 }
+
+                & .modalWindowChild_editabel {
+                    & div.editTargetContent {
+                        margin-bottom: 0em;
+                        border-right: 1px solid #dadada;
+                        padding-right: 2.5em;
+                        text-align: left;
+                    }
+                }
             }
         }
     }
@@ -317,6 +332,10 @@ ul.todoLists {
     .todoForm,
     .todoLists .formBtns {
         font-size: 14px;
+    }
+
+    .todoLists .formBtns {
+        line-height: 44px;
     }
 
     & .todoView {
@@ -339,6 +358,16 @@ ul.todoLists {
 
         & .todoCtrlElm {
             padding: 5em;
+        }
+    }
+
+    ul.todoLists {
+        & li {
+            & .modalWindow {
+                & .modalWindowChild_editabel {
+                    min-width: 800px;
+                }
+            }
         }
     }
 }

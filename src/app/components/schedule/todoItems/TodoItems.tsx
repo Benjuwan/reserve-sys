@@ -44,7 +44,10 @@ function TodoItems({ todoItem }: { todoItem: todoItemType }) {
 
     return (
         <div className={todoStyle.modalWindow}>
-            <div className={todoStyle.modalWindowChild} style={todoItem.edit ? { 'minWidth': '800px' } : undefined}>
+            <div className={todoItem.edit ?
+                `${todoStyle.modalWindowChild} ${todoStyle.modalWindowChild_editabel}` :
+                `${todoStyle.modalWindowChild}`
+            }>
                 {todoItem.edit ?
                     <TodoItemsEditable props={{
                         todoItem: todoItem,
