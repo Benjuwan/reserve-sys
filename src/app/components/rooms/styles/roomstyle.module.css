@@ -83,7 +83,7 @@
     }
 }
 
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 1080px) {
     .timeScheduleWrapper {
         overflow-x: unset;
     }
