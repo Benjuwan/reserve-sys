@@ -61,8 +61,8 @@ function TodoList({ todoID }: { todoID: string }) {
                                             {todoItem.rooms &&
                                                 <p>［{todoItem.rooms}］</p>
                                             }
-                                            {todoItem.todoContent.length > 6 ?
-                                                <p>{todoItem.todoContent.slice(0, 6)}...</p> :
+                                            {todoItem.todoContent.length > 4 ?
+                                                <p>{todoItem.todoContent.slice(0, 4)}...</p> :
                                                 <p>{todoItem.todoContent}</p>
                                             }
                                         </div>

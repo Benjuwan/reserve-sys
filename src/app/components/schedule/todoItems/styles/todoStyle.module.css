@@ -95,7 +95,7 @@
     &#closeBtn {
         background-color: #f0b20e;
         color: #333;
-        margin-top: .5em;
+        margin-top: 1em;
     }
 
     &#regiUpdateBtn {
@@ -150,7 +150,7 @@ ul.todoLists {
         justify-content: center;
         gap: .5em;
         background-color: #fafafa;
-        padding: .5em;
+        padding: .25em;
         box-shadow: 0 0 8px rgba(0, 0, 0, .25) inset;
         border-radius: 4px;
 
@@ -165,6 +165,7 @@ ul.todoLists {
         }
 
         & p {
+            font-feature-settings: 'palt';
             margin: 0;
         }
 
@@ -175,7 +176,7 @@ ul.todoLists {
             gap: 1em;
 
             & .editBtn {
-                width: clamp(8rem, calc(100vw/2), 16rem);
+                width: clamp(80px, calc(100vw/2), 160px);
                 margin: auto;
             }
         }
@@ -205,13 +206,15 @@ ul.todoLists {
             opacity: 0;
             visibility: hidden;
             transition: opacity .25s, visibility .25s;
+            overflow-y: auto;
+            overscroll-behavior: contain;
 
             & .modalWindowChild {
                 display: flex;
                 flex-flow: row wrap;
                 justify-content: center;
                 gap: 1em;
-                width: clamp(32rem, 100%, 56rem);
+                width: 100%;
                 margin: auto;
                 background-color: #fff;
                 box-shadow: 0 0 4px rgba(0, 0, 0, .5) inset;
@@ -232,6 +235,7 @@ ul.todoLists {
                     display: flex;
                     gap: 1em;
                     width: clamp(280px, calc(100vw/2), 320px);
+                    margin: 2.5em 0 1em;
 
                     & button {
                         width: 50%;
@@ -247,7 +251,7 @@ ul.todoLists {
         }
 
         & .isMobileNotice {
-            font-size: clamp(5px, calc(100vw/48), 10px);
+            font-size: clamp(8px, calc(100vw/32), 10px);
         }
 
         & .pwLabel {
@@ -266,7 +270,46 @@ ul.todoLists {
     }
 }
 
-@media screen and (min-width:1025px) {
+@media screen and (min-width: 720px) {
+    ul.todoLists {
+        max-height: 160px;
+
+        & li {
+            & .modalWindow {
+                display: grid;
+                place-content: center;
+
+                & .modalWindowChild {
+                    width: 100%;
+                    gap: 2em;
+
+                    & .editerIntoCtrlBtns {
+                        width: 100%;
+                    }
+
+                    & form {
+                        & .timeSchedule {
+                            display: flex;
+                            justify-content: flex-start;
+                            gap: 1em;
+
+                            & label {
+                                width: 100%;
+                                text-align: left;
+
+                                & input {
+                                    width: 70%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1080px) {
     .todoForm {
         width: clamp(320px, 100%, 560px);
     }
@@ -296,48 +339,6 @@ ul.todoLists {
 
         & .todoCtrlElm {
             padding: 5em;
-        }
-    }
-
-    ul.todoLists {
-        max-height: 160px;
-
-        & li {
-            & .editFalseMode {
-                & .editBtn {
-                    width: clamp(80px, calc(100vw/2), 160px);
-                }
-            }
-
-            & .modalWindow {
-                padding: 5em;
-
-                & .modalWindowChild {
-                    width: clamp(320px, 100%, 560px);
-                    gap: 2em;
-
-                    & .editerIntoCtrlBtns {
-                        width: 100%;
-                    }
-
-                    & form {
-                        & .timeSchedule {
-                            display: flex;
-                            justify-content: flex-start;
-                            gap: 1em;
-
-                            & label {
-                                width: 100%;
-                                text-align: left;
-
-                                & input {
-                                    width: 70%;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

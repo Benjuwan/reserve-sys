@@ -103,7 +103,7 @@
     }
 }
 
-@media screen and (min-width: 1025px) {
+@media screen and (min-width: 1080px) {
     .wrapper {
         width: clamp(300px, 100%, 960px);
 

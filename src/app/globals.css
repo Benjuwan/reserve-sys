@@ -198,7 +198,11 @@ body {
   margin: auto;
 }
 
-@media screen and (min-width: 1025px) {
+/* 
+  * min：320/640/960
+  * max：360/720/1080
+*/
+@media screen and (min-width: 1080px) {
   html {
     font-size: 100%;
   }
