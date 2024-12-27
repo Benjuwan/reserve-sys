@@ -104,9 +104,11 @@
 }
 
 .todoForm {
-    width: clamp(280px, calc(100vw/2), 320px);
+    width: 56%;
     margin: 0 auto 1em;
     text-align: left;
+    display: flex;
+    flex-direction: column;
 
     & select {
         margin: -1em 0 1em;
@@ -214,21 +216,15 @@ ul.todoLists {
                 flex-flow: row wrap;
                 justify-content: center;
                 gap: 1em;
-                width: 100%;
+                max-width: 560px;
                 margin: auto;
                 background-color: #fff;
                 box-shadow: 0 0 4px rgba(0, 0, 0, .5) inset;
                 border-radius: 4px;
-                padding: 3em 1em;
+                padding: 1em;
 
                 & div.editTargetContent {
                     text-align: left;
-                }
-
-                & form {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1em;
                 }
 
                 & .editerIntoCtrlBtns {
@@ -277,14 +273,28 @@ ul.todoLists {
 }
 
 @media screen and (min-width: 720px) {
+    .todoForm {
+        & .timeSchedule {
+            display: flex;
+            justify-content: flex-start;
+            gap: 1em;
+
+            & label {
+                width: 100%;
+                text-align: left;
+
+                & input {
+                    width: 70%;
+                }
+            }
+        }
+    }
+
     ul.todoLists {
         max-height: 160px;
 
         & li {
             & .modalWindow {
-                display: grid;
-                place-content: center;
-
                 & .modalWindowChild {
                     min-width: 400px;
                     gap: 2em;
@@ -292,27 +302,11 @@ ul.todoLists {
                     & .editerIntoCtrlBtns {
                         width: 100%;
                     }
-
-                    & form {
-                        & .timeSchedule {
-                            display: flex;
-                            justify-content: flex-start;
-                            gap: 1em;
-
-                            & label {
-                                width: 100%;
-                                text-align: left;
-
-                                & input {
-                                    width: 70%;
-                                }
-                            }
-                        }
-                    }
                 }
 
                 & .modalWindowChild_editabel {
                     & div.editTargetContent {
+                        width: 40%;
                         margin-bottom: 0em;
                         border-right: 1px solid #dadada;
                         padding-right: 2.5em;
@@ -325,9 +319,6 @@ ul.todoLists {
 }
 
 @media screen and (min-width: 1080px) {
-    .todoForm {
-        width: clamp(320px, 100%, 560px);
-    }
 
     .todoForm,
     .todoLists .formBtns {
