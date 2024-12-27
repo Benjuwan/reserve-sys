@@ -1,4 +1,5 @@
 ## Reserve-Sys
+[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリの派生ver（`prisma`×`postgreSQL(vercel)`）<br><br>
 任意の部屋数を用意するとともに、各部屋ごとの予約を視覚的に把握及び管理・編集できる「会議室予約システムUI」です。<br>`prisma`×`postgreSQL(vercel)`で予約内容を管理しています。<br>
 
 - `src/app/types/rooms-atom.ts`<br>
@@ -38,7 +39,7 @@ DATABASE_URL=postgres://...
 必要な各種環境変数の管理
 ```
 # NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handler の APIエンドポイントのドメインとして使用）
-NEXT_PUBLIC_API_URL=http://...
+NEXT_PUBLIC_API_URL="http://localhost:3000/"
 
 # データベース（postgresql）に関わる各種環境変数は[ vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
 ```
