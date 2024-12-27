@@ -26,3 +26,41 @@
 ## 備考
 - `src\app\components\schedule\calendar\Calendar.tsx`
 当日以前の過去予約分は上記コンポーネント内の`deleteReservation`メソッドで削除
+
+- `.env`
+`.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[`vercel`ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
+
+- `.env.local`
+必要な各種環境変数の管理
+```
+# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handler の APIエンドポイントのドメインとして使用）
+NEXT_PUBLIC_API_URL=...
+
+# データベース（postgresql）に関わる各種環境変数は[ vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
+```
+
+- `prisma\schema.prisma`の設定
+```
+generator client {
+  provider = "prisma-client-js" // Prismaクライアントを生成するためのライブラリを指定
+}
+
+datasource db {
+  provider = "postgresql"           // 使用するDBの種類を指定（vercel postgresql）
+  url      = env("DATABASE_URL")    // データベースの参照先URL（.env の DATABASE_URL の値）
+}
+
+// データベースの（ Reservation ）テーブル内容とリンクさせるための設定
+model Reservation {
+  id          String   @id @default(uuid()) // 主キーの指定（UUID）
+  todoID      String                        // 日付 (yyyy/mm/d)
+  todoContent String                        // 予約内容
+  edit        Boolean  @default(false)
+  pw          String                        // 編集可否パスワード
+  rooms       String                        // 予約会議室名
+  startTime   String                        // 開始時間 (hh:mm)
+  finishTime  String                        // 終了時間 (hh:mm)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+```
