@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 datasource db {
-  provider = "sqlite"         // 使用するDBの種類を指定（今回はSQLite）
-  url      = "file:./dev.db"  // プロジェクト内の dev.db をデータベースの参照URLとして設定
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
 }
 
 generator client {
