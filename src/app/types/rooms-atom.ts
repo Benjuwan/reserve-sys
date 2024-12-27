@@ -6,8 +6,8 @@ export const timeBlockEnd: number = 21;  // 予約可能-終了時間
 
 //「：」より後の文字がスケジュールテーブルに表示されます
 const rooms: roomsType = [
-    { room: '会議室：2F' },
-    { room: '多目的ホール：3F' },
-    { room: '応接室：4F' }
+    { room: '会議室A(大) ※奥：4F-A' },
+    { room: '会議室B(小) ※手前：4F-B' },
+    { room: 'フリースペース：7F' }
 ];
 export const roomsAtom = atom<roomsType>(rooms);
