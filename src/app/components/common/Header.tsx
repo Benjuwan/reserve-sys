@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { memo } from "react";
 import baseStyle from "../../styles/page.module.css";
+import TheHeadingOne from "./components/TheHeadingOne";
 
 function Header() {
     return (
@@ -11,7 +12,7 @@ function Header() {
                     <li><Link href={'/about'}>使い方について</Link></li>
                 </ul>
             </nav>
-            <h1>Reservation Rooms</h1>
+            <TheHeadingOne />
         </header>
     );
 }

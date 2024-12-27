@@ -33,7 +33,7 @@
                 width: 1px;
 
                 &[data-reserved=true] {
-                    background-color: #89e3d5;
+                    background-color: #b6f7ba;
                 }
 
                 &:nth-of-type(15n+15) {

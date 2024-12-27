@@ -50,7 +50,11 @@ function TodoList({ todoID }: { todoID: string }) {
                                                 <p className={todoStyle.editTargetStr}>{todoItem.todoContent}</p>
                                             }
                                             {todoItem.rooms &&
-                                                <span>［{todoItem.rooms}］</span>
+                                                <span>［{
+                                                    todoItem.rooms.includes('：') ?
+                                                        todoItem.rooms.split('：')[1] :
+                                                        todoItem.rooms
+                                                }］</span>
                                             }
                                             {(todoItem.startTime && todoItem.finishTime) ?
                                                 <span>{todoItem.startTime} ～ {todoItem.finishTime}</span>
