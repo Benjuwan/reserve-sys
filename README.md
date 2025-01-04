@@ -9,6 +9,29 @@
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 - [Vercel Postgres Pricing](https://vercel.com/docs/storage/vercel-postgres/usage-and-pricing)
 
+### Vercel / prisma
+1. `Vercel`に当該`GitHub`リポジトリをリンク（デプロイ）
+2. `Vercel`ダッシュボード内の[`Storage`]でデータベースを作成
+3. `prisma`の設定を行う
+ - Prismaのインストール（※インストールしていない場合）
+ ```
+ npm install prisma @prisma/client
+ npm install @prisma/client
+ ```
+ - Prismaの初期化
+ ```
+ npx prisma init
+ ```
+ - マイグレーションフォルダの生成
+ ```
+ npx prisma migrate dev --name init
+ ```
+ - クライアントの生成
+ ```
+ npx prisma generate
+ ```
+4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、`Vercel`での環境変数の設定も行う
+
 ## 技術構成
 - @prisma/client@6.1.0
 - @types/node@20.16.11
