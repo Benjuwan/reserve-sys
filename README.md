@@ -14,20 +14,20 @@
 2. `Vercel`ダッシュボード内の[`Storage`]でデータベースを作成
 3. `prisma`の設定を行う
  - Prismaのインストール（※インストールしていない場合）
- ```
+ ```bash
  npm install prisma @prisma/client
  npm install @prisma/client
  ```
  - Prismaの初期化
- ```
+ ```bash
  npx prisma init
  ```
  - マイグレーションフォルダの生成
- ```
+ ```bash
  npx prisma migrate dev --name init
  ```
  - クライアントの生成
- ```
+ ```bash
  npx prisma generate
  ```
 4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、`Vercel`での環境変数の設定も行う
@@ -41,7 +41,7 @@
 - eslint-config-next@15.1.1
 - eslint@8.57.1
 - jotai@2.10.0
-- next@15.1.1
+- next@15.1.3
 - prisma@6.1.0
 - react-dom@19.0.0
 - react@19.0.0
@@ -92,3 +92,65 @@ model Reservation {
   updatedAt   DateTime @updatedAt
 }
 ```
+
+### 異なる開発環境（別PC）で作業する場合
+前提として`.vercel`フォルダをはじめ、各種環境変数（`.env`, `.env.local`）の設定を行わなければならない。これらの設定を通じて Vercel（を通じて連携しているデータベース`postgresql`）に接続し、開発環境を整えることができる。<br>
+
+1. [`Vercel CLI`](https://vercel.com/docs/cli)をインストール
+```bash
+npm i -g vercel
+```
+ - 上記コマンドを権限制限により実行できない（インストール許可がされない）場合は
+   - windows<br>
+   `vscode`のターミナルではなく`コマンドプロンプト`で実行してみる。それでもできない場合は以下に進む（`vscode`利用）
+   - Mac<br>
+     1. `vscode`を開いて`com/ctrl + shift + p`で表示される入力項目に`Shell`と打鍵し、`シェルコマンド:PATH内に'code'コマンドをインストールします`を選択。選択後は画面に表示されるフロー通り許可してインストールを進めていく。
+     2. 以下のフローを進める
+        - グローバルパッケージのインストール先ディレクトリを確認。通常`/usr/local`や`/usr/lib/node_modules`など管理者権限が必要な場所が表示される。
+        ```bash
+        npm config get prefix
+        ```
+        - グローバルパッケージのインストール先をユーザーディレクトリに変更。
+        ```bash
+        mkdir -p ~/.npm-global
+        npm config set prefix '~/.npm-global'
+        ```
+        - 環境設定： `~/.zshrc`や`~/.bashrc`など、使用しているシェルの設定ファイル末尾に`export PATH=~/.npm-global/bin:$PATH`を追加（`nano ~/.zshrc`で当該ファイルを開ける）
+        ```
+        export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+        ## 以下を追加
+        export PATH=~/.npm-global/bin:$PATH
+        ```
+        - 設定を反映
+        ```bash
+        source ~/.zshrc  # または ~/.bashrc
+        ```
+        - 再度インストールを試す
+        ```bash
+        npm i -g vercel
+        ```
+     3. Vercel へログイン 
+     ```bash
+     vercel link
+     ```
+     ログイン種別を選択後、ターミナルに表示された指示通りに進めてプロジェクトを作成すると`.vercel`フォルダが生成される。用が済んだら以下でログアウトしておく。
+     ```bash
+     vercel logout
+     ```
+     4. 環境変数の設定
+     データベース接続に必要な環境変数を、 Vercel ダッシュボードで確認し、ローカル環境の`.env`, `.env.local`ファイルに設定。
+     5. Vercel（を通じて連携しているデータベース`postgresql`）に接続
+     開発初期段階またはプロトタイプの場合は`npx prisma db push`で良いが、既に中身のある**本環境で機能しているデータベースの場合**は`npx prisma migrate dev`でなければならない。その理由が以下。
+     - データの整合性と安全性
+       - `migrate dev`は、データ損失のリスクを最小限に抑えるように設計されている
+       - 変更の影響を事前に確認でき、危険な操作がある場合は警告が表示される
+     - 変更の追跡と管理
+       - 各変更がSQLファイルとして記録されるため、どのような変更が行われたか常に把握できる
+       - 問題が発生した場合、変更履歴を追跡して原因特定が容易
+     - チーム開発との整合性
+       - 他の開発者も同じマイグレーション履歴に従うことで、環境間の一貫性が保たれる
+       - 本番環境とステージング環境で同じ変更を確実に適用できる
+     - ロールバックの可能性
+       - 問題が発生した場合、以前の状態に戻すことが可能
+       - `db push`ではこのような安全性は確保できません
