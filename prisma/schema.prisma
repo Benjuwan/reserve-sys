@@ -13,6 +13,7 @@ model Reservation {
   todoContent String
   edit        Boolean  @default(false)
   pw          String
+  person      String
   rooms       String
   startTime   String
   finishTime  String
