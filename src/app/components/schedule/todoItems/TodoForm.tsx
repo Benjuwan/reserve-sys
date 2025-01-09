@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { roomsAtom } from "@/app/types/rooms-atom";
 import { todoItemType } from "./ts/todoItemType";
 import TodoFormItemContent from "./utils/TodoFormItemContent";
+import TodoFormItemPerson from "./utils/TodoFormItemPerson";
 import TodoFormItemRoom from "./utils/TodoFormItemRoom";
 import TodoFormItemTimeSchedule from "./utils/TodoFormItemTimeSchedule";
 import TodoFormItemPassword from "./utils/TodoFormItemPassword";
@@ -31,6 +32,7 @@ function TodoForm({ props }: { props: TodoFormType }) {
         todoContent: '',
         edit: todoItem ? todoItem.edit : false,
         pw: '',
+        person: todoItem ? todoItem.person : '',
         rooms: roomRef.current !== null ? roomRef.current.value : rooms[0].room,
         startTime: '',
         finishTime: ''
@@ -67,6 +69,9 @@ function TodoForm({ props }: { props: TodoFormType }) {
         }}>
             {/* 予約内容 */}
             <TodoFormItemContent todoItems={todoItems} setTodoItems={setTodoItems} />
+
+            {/* 予約者／部署名 */}
+            <TodoFormItemPerson todoItems={todoItems} setTodoItems={setTodoItems} />
 
             {/* 予約室 */}
             <TodoFormItemRoom rooms={rooms} todoItems={todoItems} setTodoItems={setTodoItems} roomRef={roomRef} />
