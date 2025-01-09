@@ -1,9 +1,62 @@
 ## Reserve-Sys
-[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリの派生ver（`prisma`×`postgreSQL(vercel)`）<br><br>
+[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリの派生ver（`prisma`×`postgreSQL`）<br><br>
 任意の部屋数を用意するとともに、各部屋ごとの予約を視覚的に把握及び管理・編集できる「会議室予約システムUI」です。<br>`prisma`×`postgreSQL(vercel)`で予約内容を管理しています。<br>
 
 - `src/app/types/rooms-atom.ts`<br>
 部屋数と予約可能時間の設定ファイル。変更・修正するたびにビルドすること（※残っている予約データに注意）
+
+### 仕様紹介
+以下の仕様に関しては[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリと同様です。<br><br>
+
+- 予約内容の重複禁止<br>他の方が先に予約している場合は受け付けません。
+- 予約時間外は受付不可<br>今月かつ「`timeBlockBegin`時～`timeBlockEnd`時（※）」の時間帯で予約できます。また、タイムテーブルには当日分の予約内容が反映されます。<br>※：`src/app/types/rooms-atom.ts`の`timeBlockBegin`と`timeBlockEnd`から値を取得
+- 過去の予約内容は随時削除<br>当日以前の過去予約内容は削除（※）されます。<br>※：`src/app/components/schedule/calendar/Calendar.tsx`内の`useEffect`での`deleteReservation`処理にて実行
+
+#### 予約方法
+<img width="948" alt="スケジュール欄の日付にあるアイコンをクリック" src="https://github.com/user-attachments/assets/38353bee-9797-4b3d-a228-70ec86d01b84" />
+
+- スケジュール欄の日付にあるアイコンをクリック
+
+---
+<img width="916" alt="表示されたフォーム内の所定項目を選択及び入力" src="https://github.com/user-attachments/assets/8401cc6b-8379-4afb-beff-29a13f8857c2" />
+
+- 表示されたフォーム内の所定項目を選択及び入力
+
+---
+<img width="817" alt="登録完了" src="https://github.com/user-attachments/assets/50cf9e66-6519-453a-b325-f67e5a7c4e7a" />
+
+- 登録完了
+
+#### 予約内容の変更
+<img width="816" alt="スケジュール欄の日付にある編集したいタスクをクリックすると上記画面が表示される" src="https://github.com/user-attachments/assets/fb824b3a-98a1-49f4-bc5c-b3149d2e20b3" />
+
+- スケジュール欄の日付にある**編集したいタスクをクリック**すると上記画面が表示される
+
+---
+<img width="802" alt="表示されたフォーム内の所定項目を選択及び入力（編集）" src="https://github.com/user-attachments/assets/b91c0144-22fe-45de-b387-3ab4702c635a" />
+
+- 表示されたフォーム内の所定項目を選択及び入力（編集）
+
+---
+<img width="804" alt="06" src="https://github.com/user-attachments/assets/426a007f-560b-4792-a674-fe07986a98c2" />
+
+- 編集完了
+
+## 技術構成
+- @prisma/client@6.2.1
+- @types/node@20.16.11
+- @types/react-dom@19.0.2 overridden
+- @types/react@19.0.1 overridden
+- @types/uuid@10.0.0
+- eslint-config-next@15.1.1
+- eslint@8.57.1
+- jotai@2.10.0
+- next@15.1.3
+- prisma@6.2.1
+- react-dom@19.0.0
+- react@19.0.0
+- typescript@5.6.2
+- uuid@10.0.0
 
 ## Vercel Postgres 関連情報
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
@@ -32,68 +85,31 @@
  ```
 4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、`Vercel`での環境変数の設定も行う
 
-## 技術構成
-- @prisma/client@6.1.0
-- @types/node@20.16.11
-- @types/react-dom@19.0.2 overridden
-- @types/react@19.0.1 overridden
-- @types/uuid@10.0.0
-- eslint-config-next@15.1.1
-- eslint@8.57.1
-- jotai@2.10.0
-- next@15.1.3
-- prisma@6.1.0
-- react-dom@19.0.0
-- react@19.0.0
-- typescript@5.6.2
-- uuid@10.0.0
+### `vercel`デプロイ時に`prisma`起因のエラー
+- `prisma`起因のエラー
+`vercel`の「`Node.js`の依存関係をキャッシュ」する働きによって「古い`Prisma Client`が使用されてしまって」デプロイエラーになっていた。（＝`Prisma Client`の自動生成が正しく実行されていなかった）
 
-## 備考
-- `src\app\components\schedule\calendar\Calendar.tsx`
-当日以前の過去予約分は上記コンポーネント内の`deleteReservation`メソッドで削除
-
-- `.env`
-`.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[`vercel`ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
 ```
-DATABASE_URL=postgres://...
+Error [PrismaClientInitializationError]: Prisma has detected that this project was built on Vercel, which caches dependencies. This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered. To fix this, make sure to run the `prisma generate` command during the build process.
 ```
 
-- `.env.local`
-必要な各種環境変数の管理
-```
-# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handler の APIエンドポイントのドメインとして使用）
-NEXT_PUBLIC_API_URL="http://localhost:3000/"
+- 解決策
+`build`時に`prisma generate`で`Prisma Client`を新規制作するように変更する
 
-# データベース（postgresql）に関わる各種環境変数は[ vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
-```
-
-- `prisma\schema.prisma`の設定
-```
-generator client {
-  provider = "prisma-client-js" // Prismaクライアントを生成するためのライブラリを指定
-}
-
-datasource db {
-  provider = "postgresql"           // 使用するDBの種類を指定（vercel postgresql）
-  url      = env("DATABASE_URL")    // データベースの参照先URL（.env の DATABASE_URL の値）
-}
-
-// データベースの（ Reservation ）テーブル内容とリンクさせるための設定
-model Reservation {
-  id          String   @id @default(uuid()) // 主キーの指定（UUID）
-  todoID      String                        // 日付 (yyyy/mm/d)
-  todoContent String                        // 予約内容
-  edit        Boolean  @default(false)
-  pw          String                        // 編集可否パスワード
-  rooms       String                        // 予約会議室名
-  startTime   String                        // 開始時間 (hh:mm)
-  finishTime  String                        // 終了時間 (hh:mm)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+```diff
+{
+  "scripts": {
+    "dev": "next dev",
+-   "build": "next build",
++   "build": "prisma generate && next build",
+    ...
+    ..
+    .
+  }
 }
 ```
 
-### 異なる開発環境（別PC）で作業する場合
+## 異なる開発環境（別PC）で作業する場合
 前提として`.vercel`フォルダをはじめ、各種環境変数（`.env`, `.env.local`）の設定を行わなければならない。これらの設定を通じて Vercel（を通じて連携しているデータベース`postgresql`）に接続し、開発環境を整えることができる。<br>
 
 1. [`Vercel CLI`](https://vercel.com/docs/cli)をインストール
@@ -154,3 +170,77 @@ npm i -g vercel
      - ロールバックの可能性
        - 問題が発生した場合、以前の状態に戻すことが可能
        - `db push`ではこのような安全性は確保できません
+
+## 備考
+- `.env`
+`.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[`vercel`ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
+```
+DATABASE_URL=postgres://...
+```
+
+- `.env.local`
+必要な各種環境変数の管理
+```
+# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handler の APIエンドポイントのドメインとして使用）
+NEXT_PUBLIC_API_URL="http://localhost:3000/"
+
+# データベース（postgresql）に関わる各種環境変数は[ vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
+```
+
+- `prisma\schema.prisma`の設定
+```
+generator client {
+  provider = "prisma-client-js" // Prismaクライアントを生成するためのライブラリを指定
+}
+
+datasource db {
+  provider = "postgresql"           // 使用するDBの種類を指定（vercel postgresql）
+  url      = env("DATABASE_URL")    // データベースの参照先URL（.env の DATABASE_URL の値）
+}
+
+// データベースの（ Reservation ）テーブル内容とリンクさせるための設定
+model Reservation {
+  id          String   @id @default(uuid()) // 主キーの指定（UUID）
+  todoID      String                        // 日付 (yyyy/mm/d)
+  todoContent String                        // 予約内容
+  edit        Boolean  @default(false)
+  pw          String                        // 編集可否パスワード
+  rooms       String                        // 予約会議室名
+  startTime   String                        // 開始時間 (hh:mm)
+  finishTime  String                        // 終了時間 (hh:mm)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+```
+
+### データベースの仕様（テーブル）更新
+登録内容を変更したい場合、以下フローを実行する必要がある。
+- `prisma/schema.prisma`<br>`model`オブジェクトの内容を編集（登録内容を追加・削除）
+- `prisma/schema.prisma`の`model`オブジェクト編集後、以下のコマンドをターミナルに打つ
+```bash
+# マイグレーションファイルを作成し、データベースに変更を適用
+npx prisma migrate dev --name what_you_changed # --name 以降は任意の命名
+
+# Prismaクライアントを更新して新しいスキーマを反映
+npx prisma generate
+```
+
+> [!NOTE]  
+> `prisma/dev.db-journal`<br>`dev.db-journal`という`SQLite`の内部処理用ファイルが生成されるが自動的に生成・削除されるが無視して良い（`dev.db-journal`は`SQLite`が自動的に管理する`SQLite`のトランザクションログファイルで、データベース操作の一時的な記録を保持している）
+
+- `src/app/components/schedule/todoItems/ts/todoItemType.ts`<br>登録内容の型情報を編集
+- `src/app/components/schedule/todoItems/TodoForm.tsx`
+  - `todoItems`ステートの初期値である`initTodoItems`オブジェクトを編集（オブジェクトに当該登録内容であるプロパティ・キーを追加・削除）
+  - （変更した）当該登録内容に関する入力フォームを（`src/app/components/schedule/todoItems/utils`配下に）用意または調整
+- `src/app/api/reservations/`配下の`Route Handler`の登録内容を編集
+  - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）
+    - ※`data`オブジェクト編集後に型エラーが表示される場合は一旦`VSCode`を閉じてみる
+
+> [!NOTE]  
+> - 上記フローを経ても予約登録機能が動かない場合<br>
+> 異なる開発環境（別PC）に更新内容を反映させる場合の注意事項です。<br>
+> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。<br>WindowsPCでコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
+> ```bash
+> # Prismaクライアントを更新して新しいスキーマを反映
+> npx prisma generate
+> ```
