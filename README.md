@@ -42,6 +42,12 @@
 
 - 編集完了
 
+### アラートコード
+- 予約内容の時間帯が競合した場合に表示されるアラート情報の発生元ファイル
+  - aCode:001<br>`src\app\components\schedule\todoItems\TodoForm.tsx`
+  - aCode:002<br>`src\app\components\schedule\todoItems\utils\TodoFormItemTimeSchedule.tsx`
+  - aCode:003<br>`src\app\components\schedule\todoItems\utils\TodoFormItemRegiBtn.tsx`
+
 ## 技術構成
 - @prisma/client@6.2.1
 - @types/node@20.16.11
@@ -86,14 +92,14 @@
 4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、`Vercel`での環境変数の設定も行う
 
 ### `vercel`デプロイ時に`prisma`起因のエラー
-- `prisma`起因のエラー
+- `prisma`起因のエラー<br>
 `vercel`の「`Node.js`の依存関係をキャッシュ」する働きによって「古い`Prisma Client`が使用されてしまって」デプロイエラーになっていた。（＝`Prisma Client`の自動生成が正しく実行されていなかった）
 
 ```
 Error [PrismaClientInitializationError]: Prisma has detected that this project was built on Vercel, which caches dependencies. This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered. To fix this, make sure to run the `prisma generate` command during the build process.
 ```
 
-- 解決策
+- 解決策<br>
 `build`時に`prisma generate`で`Prisma Client`を新規制作するように変更する
 
 ```diff
@@ -146,7 +152,7 @@ npm i -g vercel
         ```bash
         npm i -g vercel
         ```
-     3. Vercel へログイン 
+     3. Vercel へログイン
      ```bash
      vercel link
      ```
@@ -172,13 +178,13 @@ npm i -g vercel
        - `db push`ではこのような安全性は確保できません
 
 ## 備考
-- `.env`
+- `.env`<br>
 `.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[`vercel`ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
 ```
 DATABASE_URL=postgres://...
 ```
 
-- `.env.local`
+- `.env.local`<br>
 必要な各種環境変数の管理
 ```
 # NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handler の APIエンドポイントのドメインとして使用）
@@ -216,7 +222,7 @@ model Reservation {
 ### データベースの仕様（テーブル）更新
 登録内容を変更したい場合、以下フローを実行する必要がある。
 - `prisma/schema.prisma`<br>`model`オブジェクトの内容を編集（登録内容を追加・削除）
-- `prisma/schema.prisma`の`model`オブジェクト編集後、以下のコマンドをターミナルに打つ
+- `prisma/schema.prisma`の`model`オブジェクト編集後、以下のコマンドをターミナルに打つ<br>
 ```bash
 # マイグレーションファイルを作成し、データベースに変更を適用
 npx prisma migrate dev --name what_you_changed # --name 以降は任意の命名
