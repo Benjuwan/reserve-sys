@@ -232,7 +232,7 @@ npx prisma generate
 ```
 
 > [!NOTE]  
-> `prisma/dev.db-journal`<br>`dev.db-journal`という`SQLite`の内部処理用ファイルが生成されるが自動的に生成・削除されるが無視して良い（`dev.db-journal`は`SQLite`が自動的に管理する`SQLite`のトランザクションログファイルで、データベース操作の一時的な記録を保持している）
+> `prisma/dev.db-journal`<br>`dev.db-journal`という`SQLite`の内部処理用ファイルが自動的に生成・削除されるが無視して良い（`dev.db-journal`は`SQLite`が自動的に管理する`SQLite`のトランザクションログファイルで、データベース操作の一時的な記録を保持している）
 
 - `src/app/components/schedule/todoItems/ts/todoItemType.ts`<br>登録内容の型情報を編集
 - `src/app/components/schedule/todoItems/TodoForm.tsx`
