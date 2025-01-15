@@ -64,36 +64,41 @@
 - typescript@5.6.2
 - uuid@10.0.0
 
-## Vercel Postgres 関連情報
-- [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
-- [Vercel Postgres Pricing](https://vercel.com/docs/storage/vercel-postgres/usage-and-pricing)
-
 ### Vercel / prisma
-1. `Vercel`に当該`GitHub`リポジトリをリンク（デプロイ）
-2. `Vercel`ダッシュボード内の[`Storage`]でデータベースを作成
+1. Vercel に当該`GitHub`リポジトリをリンク（デプロイ）
+2. Vercel ダッシュボード内の[`Storage`]でデータベースを作成
 3. `prisma`の設定を行う
  - Prismaのインストール（※インストールしていない場合）
  ```bash
+ # Prisma のプロジェクトを初めてセットアップするケース
+ # CLI ツールとクライアントの両方をインストール
  npm install prisma @prisma/client
+
+ # Prisma クライアントをインストールまたは更新するだけのケース
+ # たとえば、本番環境やすでに Prisma CLI をセットアップ済みの場合
  npm install @prisma/client
  ```
+
  - Prismaの初期化
  ```bash
  npx prisma init
  ```
+
  - マイグレーションフォルダの生成
  ```bash
  npx prisma migrate dev --name init
  ```
+
  - クライアントの生成
  ```bash
  npx prisma generate
  ```
-4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、`Vercel`での環境変数の設定も行う
 
-### `vercel`デプロイ時に`prisma`起因のエラー
+4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、Vercel での環境変数の設定も行う
+
+### Vercel デプロイ時に`prisma`起因のエラー
 - `prisma`起因のエラー<br>
-`vercel`の「`Node.js`の依存関係をキャッシュ」する働きによって「古い`Prisma Client`が使用されてしまって」デプロイエラーになっていた。（＝`Prisma Client`の自動生成が正しく実行されていなかった）
+Vercel の「`Node.js`の依存関係をキャッシュ」する働きによって「古い`Prisma Client`が使用されてしまって」デプロイエラーになっていた。（＝`Prisma Client`の自動生成が正しく実行されていなかった）
 
 ```
 Error [PrismaClientInitializationError]: Prisma has detected that this project was built on Vercel, which caches dependencies. This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered. To fix this, make sure to run the `prisma generate` command during the build process.
@@ -132,38 +137,47 @@ npm i -g vercel
         ```bash
         npm config get prefix
         ```
+
         - グローバルパッケージのインストール先をユーザーディレクトリに変更。
         ```bash
         mkdir -p ~/.npm-global
         npm config set prefix '~/.npm-global'
         ```
-        - 環境設定： `~/.zshrc`や`~/.bashrc`など、使用しているシェルの設定ファイル末尾に`export PATH=~/.npm-global/bin:$PATH`を追加（`nano ~/.zshrc`で当該ファイルを開ける）
-        ```
+
+        - 環境設定： `~/.zshrc`や`~/.bashrc`など、使用しているシェルの設定ファイル末尾に`export PATH=~/.npm-global/bin:$PATH`を追加。<br>`nano ~/.zshrc`で当該ファイルを開ける
+        ```bash
         export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
         ## 以下を追加
         export PATH=~/.npm-global/bin:$PATH
         ```
+
         - 設定を反映
         ```bash
         source ~/.zshrc  # または ~/.bashrc
         ```
+
         - 再度インストールを試す
         ```bash
         npm i -g vercel
         ```
+
      3. Vercel へログイン
      ```bash
      vercel link
      ```
+
      ログイン種別（`GitHub`, `GitLab`, `Bitbucket`, `Email`など）を選択後、ターミナルに表示された指示通りに進めて（データベース連携している）当該プロジェクトを設定すると`.vercel`フォルダが生成される。用が済んだら以下でログアウトしておく。
+
      ```bash
      vercel logout
      ```
+
      4. 環境変数の設定<br>
      データベース接続に必要な環境変数を、 Vercel ダッシュボードで確認し、ローカル環境の`.env`, `.env.local`ファイルに設定。
      5. Vercel（を通じて連携しているデータベース`postgresql`）に接続<br>
-     開発初期段階またはプロトタイプの場合は`npx prisma db push`で良いが、既に中身のある**本環境で機能しているデータベースの場合**は`npx prisma migrate dev`でなければならない。その理由が以下。
+> [!NOTE]  
+> 開発初期段階またはプロトタイプの場合は`npx prisma db push`で良いが、既に中身のある**本環境で機能しているデータベースの場合**は`npx prisma migrate dev`でなければならない。その理由を以下に記載します。
      - データの整合性と安全性
        - `migrate dev`は、データ損失のリスクを最小限に抑えるように設計されている
        - 変更の影響を事前に確認でき、危険な操作がある場合は警告が表示される
@@ -179,7 +193,7 @@ npm i -g vercel
 
 ## 備考
 - `.env`<br>
-`.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[`vercel`ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
+`.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[ Vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
 ```
 DATABASE_URL=postgres://...
 ```
@@ -187,7 +201,7 @@ DATABASE_URL=postgres://...
 - `.env.local`<br>
 必要な各種環境変数の管理
 ```
-# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handler の APIエンドポイントのドメインとして使用）
+# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handlers の APIエンドポイントのドメインとして使用）
 NEXT_PUBLIC_API_URL="http://localhost:3000/"
 
 # データベース（postgresql）に関わる各種環境変数は[ vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
@@ -238,7 +252,7 @@ npx prisma generate
 - `src/app/components/schedule/todoItems/TodoForm.tsx`
   - `todoItems`ステートの初期値である`initTodoItems`オブジェクトを編集（オブジェクトに当該登録内容であるプロパティ・キーを追加・削除）
   - （変更した）当該登録内容に関する入力フォームを（`src/app/components/schedule/todoItems/utils`配下に）用意または調整
-- `src/app/api/reservations/`配下の`Route Handler`の登録内容を編集
+- `src/app/api/reservations/`配下の`Route Handlers`の登録内容を編集
   - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）
     - ※`data`オブジェクト編集後に型エラーが表示される場合は一旦`VSCode`を閉じてみる
 
@@ -250,3 +264,7 @@ npx prisma generate
 > # Prismaクライアントを更新して新しいスキーマを反映
 > npx prisma generate
 > ```
+
+## Vercel Postgres 関連情報
+- [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+- [Vercel Postgres Pricing](https://vercel.com/docs/storage/vercel-postgres/usage-and-pricing)
