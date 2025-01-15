@@ -94,7 +94,69 @@
  npx prisma generate
  ```
 
-4. `.env`, `.env.local`の設定（詳細は[備考](#備考)）をはじめ、Vercel での環境変数の設定も行う
+4. `.env`, `.env.local`の設定をはじめ、Vercel での環境変数の設定も行う
+- `.env`<br>
+`.env`は`npx prisma studio`の実行（`prisma studio`の起動）に必要なので用意する。<br>※`prisma studio`は`GUI`でテーブル操作できる`prisma`の機能の一つ。`GUI`でパパっと手っ取り早くテーブル操作したい場合に便利です。<br><br>
+
+`DATABASE_URL`は[ Vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
+```
+DATABASE_URL=postgres://...
+```
+
+- `.env.local`<br>
+必要な各種環境変数の管理
+```
+# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handlers の APIエンドポイントのドメインとして使用）
+NEXT_PUBLIC_API_URL="http://localhost:3000/"
+
+# データベース（postgresql）に関わる各種環境変数は[ Vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
+```
+
+5. `prisma`クライアントやスキーマの設定
+- `prisma`クライアントの設定
+  - `src/lib/prisma.ts`
+```ts
+/* クライアントで prisma を通じてデータベースを操作・利用するための機能をインポート */
+import { PrismaClient } from '@prisma/client';
+
+/* グローバルスコープに PrismaClient のインスタンスを保持するための型定義 */
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+
+/* PrismaClient のインスタンスが存在しない場合は新規作成 */
+export const prisma = globalForPrisma.prisma || new PrismaClient();
+
+/**
+ * 開発環境の場合のみ、グローバルオブジェクトに PrismaClient インスタンスを保持
+ * これにより開発時のホットリロードで複数のインスタンスが作成されることを防ぐ
+*/
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+```
+
+- `prisma\schema.prisma`（スキーマ）の設定
+```
+generator client {
+  provider = "prisma-client-js" // Prismaクライアントを生成するためのライブラリを指定
+}
+
+datasource db {
+  provider = "postgresql"           // 使用するDBの種類を指定（vercel postgresql）
+  url      = env("DATABASE_URL")    // データベースの参照先URL（.env の DATABASE_URL の値）
+}
+
+// データベースの（ Reservation ）テーブル内容とリンクさせるための設定
+model Reservation {
+  id          String   @id @default(uuid()) // 主キーの指定（UUID）
+  todoID      String                        // 日付 (yyyy/mm/d)
+  todoContent String                        // 予約内容
+  edit        Boolean  @default(false)
+  pw          String                        // 編集可否パスワード
+  rooms       String                        // 予約会議室名
+  startTime   String                        // 開始時間 (hh:mm)
+  finishTime  String                        // 終了時間 (hh:mm)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+```
 
 ### Vercel デプロイ時に`prisma`起因のエラー
 - `prisma`起因のエラー<br>
@@ -193,49 +255,7 @@ npm i -g vercel
   - 問題が発生した場合、以前の状態に戻すことが可能
   - `db push`ではこのような安全性は確保できません
 
-## 備考
-- `.env`<br>
-`.env`は`npx prisma studio`の起動に必要なので用意すること<br>`DATABASE_URL`は[ Vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
-```
-DATABASE_URL=postgres://...
-```
-
-- `.env.local`<br>
-必要な各種環境変数の管理
-```
-# NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handlers の APIエンドポイントのドメインとして使用）
-NEXT_PUBLIC_API_URL="http://localhost:3000/"
-
-# データベース（postgresql）に関わる各種環境変数は[ vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの Quickstart 欄で確認
-```
-
-- `prisma\schema.prisma`の設定
-```
-generator client {
-  provider = "prisma-client-js" // Prismaクライアントを生成するためのライブラリを指定
-}
-
-datasource db {
-  provider = "postgresql"           // 使用するDBの種類を指定（vercel postgresql）
-  url      = env("DATABASE_URL")    // データベースの参照先URL（.env の DATABASE_URL の値）
-}
-
-// データベースの（ Reservation ）テーブル内容とリンクさせるための設定
-model Reservation {
-  id          String   @id @default(uuid()) // 主キーの指定（UUID）
-  todoID      String                        // 日付 (yyyy/mm/d)
-  todoContent String                        // 予約内容
-  edit        Boolean  @default(false)
-  pw          String                        // 編集可否パスワード
-  rooms       String                        // 予約会議室名
-  startTime   String                        // 開始時間 (hh:mm)
-  finishTime  String                        // 終了時間 (hh:mm)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-```
-
-### データベースの仕様（テーブル）更新
+## データベースの仕様（テーブル）更新
 登録内容を変更したい場合、以下フローを実行する必要がある。
 - `prisma/schema.prisma`<br>`model`オブジェクトの内容を編集（登録内容を追加・削除）
 - `prisma/schema.prisma`の`model`オブジェクト編集後、以下のコマンドをターミナルに打つ<br>
@@ -248,7 +268,7 @@ npx prisma generate
 ```
 
 > [!NOTE]  
-> `prisma/dev.db-journal`<br>`dev.db-journal`という`SQLite`の内部処理用ファイルが自動的に生成・削除されるが無視して良い（`dev.db-journal`は`SQLite`が自動的に管理する`SQLite`のトランザクションログファイルで、データベース操作の一時的な記録を保持している）
+> - `prisma/dev.db-journal`<br>`dev.db-journal`という設定中のデータベース（今回は`postgresql`）の内部処理用ファイルが自動的に生成・削除されるが無視して構わない。<br>`dev.db-journal`は`postgresql`が自動的に管理する`postgresql`のトランザクションログファイルで、データベース操作の一時的な記録を保持している。
 
 - `src/app/components/schedule/todoItems/ts/todoItemType.ts`<br>登録内容の型情報を編集
 - `src/app/components/schedule/todoItems/TodoForm.tsx`
@@ -261,7 +281,7 @@ npx prisma generate
 > [!NOTE]  
 > - 上記フローを経ても予約登録機能が動かない場合<br>
 > 異なる開発環境（別PC）に更新内容を反映させる場合の注意事項です。<br>
-> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。<br>WindowsPCでコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
+> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。<br> WindowsPC でコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
 > ```bash
 > # Prismaクライアントを更新して新しいスキーマを反映
 > npx prisma generate
