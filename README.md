@@ -49,8 +49,8 @@
   - aCode:003<br>`src\app\components\schedule\todoItems\utils\TodoFormItemRegiBtn.tsx`
 
 ## 技術構成
-- @prisma/client@6.2.1
-- @types/node@20.16.11
+- @prisma/client@6.4.0
+- @types/node@22.13.4
 - @types/react-dom@19.0.2 overridden
 - @types/react@19.0.1 overridden
 - @types/uuid@10.0.0
@@ -58,7 +58,7 @@
 - eslint@8.57.1
 - jotai@2.10.0
 - next@15.1.3
-- prisma@6.2.1
+- prisma@6.4.0
 - react-dom@19.0.0
 - react@19.0.0
 - typescript@5.6.2
@@ -93,6 +93,13 @@
  ```bash
  npx prisma generate
  ```
+
+> [!NOTE]  
+> - `prisma`の更新（アップデートコマンド）
+> ```bash
+> npm i --save-dev prisma@latest
+> npm i @prisma/client@latest
+> ```
 
 4. `.env`, `.env.local`の設定をはじめ、Vercel での環境変数の設定も行う
 - `.env`<br>
@@ -238,6 +245,7 @@ npm i -g vercel
      4. 環境変数の設定<br>
      データベース接続に必要な環境変数を、 Vercel ダッシュボードで確認し、ローカル環境の`.env`, `.env.local`ファイルに設定。
      5. Vercel（を通じて連携しているデータベース`postgresql`）に接続
+     6. 以下注釈内容でデータベース（の中身）を反映
 
 > [!NOTE]  
 > 開発初期段階またはプロトタイプの場合は`npx prisma db push`で良いが、既に中身のある**本環境で機能しているデータベースの場合**は`npx prisma migrate dev`でなければならない。その理由を以下に記載します。
@@ -254,6 +262,15 @@ npm i -g vercel
 - ロールバックの可能性
   - 問題が発生した場合、以前の状態に戻すことが可能
   - `db push`ではこのような安全性は確保できません
+
+> [!NOTE]  
+> - 上記フローを経ても予約登録機能が動かない場合<br>
+> 異なる開発環境（別PC）に更新内容を反映させる場合の注意事項です。<br>
+> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。<br> WindowsPC でコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
+> ```bash
+> # Prismaクライアントを更新して新しいスキーマを反映
+> npx prisma generate
+> ```
 
 ## データベースの仕様（テーブル）更新
 登録内容を変更したい場合、以下フローを実行する必要がある。
@@ -277,15 +294,6 @@ npx prisma generate
 - `src/app/api/reservations/`配下の`Route Handlers`の登録内容を編集
   - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）
     - ※`data`オブジェクト編集後に型エラーが表示される場合は一旦`VSCode`を閉じてみる
-
-> [!NOTE]  
-> - 上記フローを経ても予約登録機能が動かない場合<br>
-> 異なる開発環境（別PC）に更新内容を反映させる場合の注意事項です。<br>
-> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。<br> WindowsPC でコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
-> ```bash
-> # Prismaクライアントを更新して新しいスキーマを反映
-> npx prisma generate
-> ```
 
 ## Vercel Postgres 関連情報
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
