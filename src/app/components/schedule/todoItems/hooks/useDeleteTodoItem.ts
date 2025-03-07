@@ -5,7 +5,7 @@ import { todoMemoAtom } from "@/app/types/calendar-atom";
 export const useDeleteTodoItem = () => {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
-    /* データベース（SQLite）から当該予約を削除 */
+    /* データベース（PostgreSQL/Neon）から当該予約を削除 */
     const deleteReservation: (id: string) => Promise<void> = async (id: string) => {
         await fetch(`/api/reservations/${id}`, {
             // delete なので DELETE、データの扱いに関する記述（headers, body, etc...）は不要
