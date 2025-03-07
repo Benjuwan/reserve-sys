@@ -5,7 +5,7 @@ import { todoMemoAtom } from "@/app/types/calendar-atom";
 export const useUpdateTodoItem = () => {
     const [todoMemo, setTodoMemo] = useAtom(todoMemoAtom);
 
-    /* データベース（SQLite）の当該予約を更新 */
+    /* データベース（PostgreSQL/Neon）の当該予約を更新 */
     const updateReservation: (data: todoItemType) => Promise<todoItemType> = async (data: todoItemType) => {
         const response = await fetch(`/api/reservations/${data.id}`, {
             method: 'PUT',
