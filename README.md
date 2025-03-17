@@ -45,7 +45,7 @@
 ---
 
 ## 技術構成
-- @prisma/client@6.4.0
+- @prisma/client@6.5.0
 - @types/node@22.13.4
 - @types/react-dom@19.0.2 overridden
 - @types/react@19.0.1 overridden
@@ -54,7 +54,7 @@
 - eslint@8.57.1
 - jotai@2.10.0
 - next@15.1.3
-- prisma@6.4.0
+- prisma@6.5.0
 - react-dom@19.0.0
 - react@19.0.0
 - typescript@5.6.2
@@ -241,7 +241,7 @@ npm i -g vercel
      4. 環境変数の設定<br>
      データベース接続に必要な環境変数を、 Vercel ダッシュボードで確認し、ローカル環境の`.env`, `.env.local`ファイルに設定。
      5. Vercel（を通じて連携しているデータベース`postgresql`）に接続
-     6. 以下注釈内容でデータベース（の中身）を反映
+     6. 以下注釈内容（`npx prisma db push`または`npx prisma migrate dev`）でデータベース（の中身）を反映
 
 > [!NOTE]  
 > 開発初期段階またはプロトタイプの場合は`npx prisma db push`で良いが、既に中身のある**本環境で機能しているデータベースの場合**は`npx prisma migrate dev`でなければならない。その理由を以下に記載します。
@@ -283,13 +283,17 @@ npx prisma generate
 > [!NOTE]  
 > - `prisma/dev.db-journal`<br>`dev.db-journal`という設定中のデータベース（今回は`postgresql`）の内部処理用ファイルが自動的に生成・削除されるが無視して構わない。<br>`dev.db-journal`は`postgresql`が自動的に管理する`postgresql`のトランザクションログファイルで、データベース操作の一時的な記録を保持している。
 
+### その他の更新・修正が必要なファイル
+※以下の更新・修正は本リポジトリにおいてのみ適用されるもので一般的なものではありません
+
 - `src/app/components/schedule/todoItems/ts/todoItemType.ts`<br>登録内容の型情報を編集
 - `src/app/components/schedule/todoItems/TodoForm.tsx`
   - `todoItems`ステートの初期値である`initTodoItems`オブジェクトを編集（オブジェクトに当該登録内容であるプロパティ・キーを追加・削除）
   - （変更した）当該登録内容に関する入力フォームを（`src/app/components/schedule/todoItems/utils`配下に）用意または調整
-- `src/app/api/reservations/`配下の`Route Handlers`の登録内容を編集
-  - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）
-    - ※`data`オブジェクト編集後に型エラーが表示される場合は一旦`VSCode`を閉じてみる
+- `src/app/api/reservations/`配下の`Route Handlers`の登録内容を編集<br>
+（※[前述のprismaデータベース更新フロー](#データベースの仕様テーブル更新)が済んでいないと進まないので注意）
+  - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）<br>
+  ※`data`オブジェクト編集後に型エラーが表示される場合は一旦`VSCode`を閉じてみる
 
 ## Vercel Postgres 関連情報
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
