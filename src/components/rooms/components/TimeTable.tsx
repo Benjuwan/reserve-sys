@@ -7,11 +7,11 @@ import { todoItemType } from "../../schedule/todoItems/ts/todoItemType";
 type timeTableProps = {
     room: string;
     todoMemo: todoItemType[];
-    ctrlMultiTimeTable: number;
+    today: number;
 };
 
 function TimeTable({ props }: { props: timeTableProps }) {
-    const { room, todoMemo, ctrlMultiTimeTable } = props;
+    const { room, todoMemo, today } = props;
 
     const timeBlocks: number[] = [];
     for (let i = timeBlockBegin; i < timeBlockEnd; i++) timeBlocks.push(i);
@@ -26,7 +26,7 @@ function TimeTable({ props }: { props: timeTableProps }) {
                             room: room,
                             timeBlock: timeBlock,
                             todoMemo: todoMemo,
-                            ctrlMultiTimeTable: ctrlMultiTimeTable
+                            today: today
                         }} />
                     </div>
                 </li>

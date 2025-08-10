@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import roomStyle from "./styles/roomstyle.module.css";
 import { useAtom } from "jotai";
 import { roomsAtom, roomsInfoToolTipAtom } from "@/types/rooms-atom";
@@ -34,8 +34,12 @@ function Rooms() {
 
     const [roomsInfo] = useAtom(roomsInfoToolTipAtom);
 
-    const today: number = useMemo(() => new Date().getDate(), []);
-    const [ctrlMultiTimeTable, setCtrlMultiTimeTable] = useState<number>(today);
+    /* 418 hydration-error 対策 */
+    const [today, setToday] = useState<number>(0);
+    useEffect(() => {
+        const today: number = new Date().getDate();
+        setToday(today);
+    }, []);
 
     return (
         <section className={roomStyle.roomWrapper}>
@@ -46,9 +50,8 @@ function Rooms() {
                 }>{roomsInfo}</p>
             }
             <MultiTimeTableCtrlBtns props={{
-                ctrlMultiTimeTable: ctrlMultiTimeTable,
-                setCtrlMultiTimeTable: setCtrlMultiTimeTable,
-                today: today
+                today: today,
+                setToday: setToday
             }} />
             {rooms.map((room, i) => (
                 <div key={i} className={roomStyle.roomContainer}>
@@ -57,7 +60,7 @@ function Rooms() {
                         <TimeTable props={{
                             room: room.room,
                             todoMemo: todoMemo,
-                            ctrlMultiTimeTable: ctrlMultiTimeTable
+                            today: today
                         }} />
                     </div>
                 </div>
