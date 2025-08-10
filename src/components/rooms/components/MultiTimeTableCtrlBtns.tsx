@@ -3,18 +3,19 @@ import roomStyle from "../styles/roomstyle.module.css";
 import ViewCurrentTimeTableDay from "./ViewCurrentTimeTableDay";
 
 type ctrlBtnsProps = {
+    ctrlMultiTimeTable: number;
+    setCtrlMultiTimeTable: React.Dispatch<React.SetStateAction<number>>;
     today: number;
-    setToday: React.Dispatch<React.SetStateAction<number>>;
 };
 
 function MultiTimeTableCtrlBtns({ props }: { props: ctrlBtnsProps }) {
-    const { today, setToday } = props;
+    const { ctrlMultiTimeTable, setCtrlMultiTimeTable, today } = props;
 
     /* 418 hydration-error 対策 */
     const [thisLastDay, setThisLastDay] = useState<number>(0);
     useEffect(() => {
-        // 当年当月の「0日目」を取得（翌月の0日＝当月の最終日）し、その日付（最終日）を出す
-        // 例：const thisLastDay = new Date(2025, 6, 0).getDate()
+        // 当年当月の「0日目」を取得（翌月の0日＝当月の最終日）し、その日付（最終日）を出す 
+        // 例：const thisLastDay = new Date(2025, 6, 0).getDate() 
         const targetLastDay: number = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
         setThisLastDay(targetLastDay);
     }, []);
@@ -37,11 +38,11 @@ function MultiTimeTableCtrlBtns({ props }: { props: ctrlBtnsProps }) {
             (oneWeekLater - thisLastDay === 0 && day > thisLastDay) ||
             day >= thisLastDay
         ) {
-            setToday(1);
+            setCtrlMultiTimeTable(1);
             return;
         }
 
-        setToday(prev => prev + 1);
+        setCtrlMultiTimeTable(prev => prev + 1);
     }
 
     // 前日のタイムテーブルを制御する関数
@@ -51,30 +52,30 @@ function MultiTimeTableCtrlBtns({ props }: { props: ctrlBtnsProps }) {
         }
 
         if (day === 1) {
-            setToday(thisLastDay);
+            setCtrlMultiTimeTable(thisLastDay);
             return;
         }
 
-        setToday(prev => prev - 1);
+        setCtrlMultiTimeTable(prev => prev - 1);
     }
 
     // ボタンのクリックイベントハンドラ（タイムテーブルの制御を担う）
-    const handletoday: (e: React.MouseEvent<HTMLButtonElement>) => void = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleCtrlMultiTimeTable: (e: React.MouseEvent<HTMLButtonElement>) => void = (e: React.MouseEvent<HTMLButtonElement>) => {
         const btnDataAttr: string = e.currentTarget.getAttribute('data-btn') ?? '';
         if (btnDataAttr === 'prev') {
-            ctrlPrevTimeTable(today);
+            ctrlPrevTimeTable(ctrlMultiTimeTable);
         } else if (btnDataAttr === 'next') {
-            ctrlNextTimeTable(today);
+            ctrlNextTimeTable(ctrlMultiTimeTable);
         }
     };
 
     return (
         <>
             <div className={roomStyle.multiTimeTableCtrlBtns}>
-                <button onClick={handletoday} data-btn="prev">&lt; 前日</button>
-                <button onClick={handletoday} data-btn="next">翌日 &gt;</button>
+                <button onClick={handleCtrlMultiTimeTable} data-btn="prev">&lt; 前日</button>
+                <button onClick={handleCtrlMultiTimeTable} data-btn="next">翌日 &gt;</button>
             </div>
-            <ViewCurrentTimeTableDay today={today} isLastWeek={isLastWeek} />
+            <ViewCurrentTimeTableDay ctrlMultiTimeTable={ctrlMultiTimeTable} isLastWeek={isLastWeek} />
         </>
     );
 }
