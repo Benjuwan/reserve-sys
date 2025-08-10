@@ -8,11 +8,11 @@ type TimeBlockType = {
     room: string;
     timeBlock: number;
     todoMemo: todoItemType[];
-    today: number;
+    ctrlMultiTimeTable: number;
 };
 
 function TimeBlock({ props }: { props: TimeBlockType }) {
-    const { room, timeBlock, todoMemo, today } = props;
+    const { room, timeBlock, todoMemo, ctrlMultiTimeTable } = props;
 
     const minBlocks: number[] = [];
     for (let i = 1; i <= 59; i++) minBlocks.push(i);
@@ -21,7 +21,7 @@ function TimeBlock({ props }: { props: TimeBlockType }) {
 
     const { hoverEventListener, leaveEventListener } = useCtrlToolTips();
 
-    const theTimeTableViewDay: string = useCreateTimeTableViewDay(today);
+    const theTimeTableViewDay: string = useCreateTimeTableViewDay(ctrlMultiTimeTable);
 
     // useMemo を使用した動的な予約情報（当日より1週間分の各部屋ごとのタイムテーブル配列）の取得 
     const relevantReservations: todoItemType[] = useMemo(() => {
@@ -30,7 +30,7 @@ function TimeBlock({ props }: { props: TimeBlockType }) {
             (typeof memo.rooms !== 'undefined' && memo.rooms === room)
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [todoMemo, room, today]);
+    }, [todoMemo, room, ctrlMultiTimeTable]);
 
     return (
         <>
