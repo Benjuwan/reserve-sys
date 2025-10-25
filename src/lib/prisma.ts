@@ -1,4 +1,5 @@
 /* https://www.prisma.io/docs/orm/more/help-and-troubleshooting/nextjs-help による推奨設定 */
+
 // lib/prisma.ts
 import { PrismaClient } from "@prisma/client";
 
