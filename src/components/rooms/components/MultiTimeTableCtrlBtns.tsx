@@ -1,6 +1,7 @@
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import roomStyle from "../styles/roomstyle.module.css";
 import ViewCurrentTimeTableDay from "./ViewCurrentTimeTableDay";
+import { useGetSpecificDay } from "../hooks/useGetSpecificDay";
 
 type ctrlBtnsProps = {
     ctrlMultiTimeTable: number;
@@ -10,26 +11,18 @@ type ctrlBtnsProps = {
 function MultiTimeTableCtrlBtns({ props }: { props: ctrlBtnsProps }) {
     const { ctrlMultiTimeTable, setCtrlMultiTimeTable } = props;
 
-    /* 418 hydration-error 対策 */
-    const [thisLastDay, setThisLastDay] = useState<number>(0);
-    const [today, setToday] = useState<number>(0);
-    useEffect(() => {
-        // 当年当月の「0日目」を取得（翌月の0日＝当月の最終日）し、その日付（最終日）を出す 
-        // 例：const thisLastDay = new Date(2025, 6, 0).getDate() 
-        const targetLastDay: number = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
-        setThisLastDay(targetLastDay);
+    const { getToday, getThisLastDay } = useGetSpecificDay();
 
-        const targetToday: number = new Date().getDate();
-        setToday(targetToday);
-    }, []);
+    const theToday = getToday();
+    const theThisLastDay = getThisLastDay();
 
     // 最終週かどうか判定
-    const isLastWeek: boolean = today > (thisLastDay - 7);
+    const isLastWeek: boolean = theToday > (theThisLastDay - 7);
 
     // 翌日のタイムテーブルを制御する関数
     const ctrlNextTimeTable: (day: number) => void = (day: number) => {
-        const oneWeekLater: number = today + 7;
-        const isPassedThisMonth: boolean = day <= 7 && day >= oneWeekLater - thisLastDay;
+        const oneWeekLater: number = theToday + 7;
+        const isPassedThisMonth: boolean = day <= 7 && day >= oneWeekLater - theThisLastDay;
 
         // 当日より起算して7日を超える場合は何もしない（タイムテーブルの表示は7日後までに制限）
         if (day >= oneWeekLater || (isLastWeek && isPassedThisMonth)) {
@@ -38,8 +31,8 @@ function MultiTimeTableCtrlBtns({ props }: { props: ctrlBtnsProps }) {
 
         //（7日後がちょうど当月の最終日かつ）最終日を超過した場合は来月初日をセットする
         if (
-            (oneWeekLater - thisLastDay === 0 && day > thisLastDay) ||
-            day >= thisLastDay
+            (oneWeekLater - theThisLastDay === 0 && day > theThisLastDay) ||
+            day >= theThisLastDay
         ) {
             setCtrlMultiTimeTable(1);
             return;
@@ -50,12 +43,12 @@ function MultiTimeTableCtrlBtns({ props }: { props: ctrlBtnsProps }) {
 
     // 前日のタイムテーブルを制御する関数
     const ctrlPrevTimeTable: (day: number) => void = (day: number) => {
-        if (day === today) {
+        if (day === theToday) {
             return;
         }
 
         if (day === 1) {
-            setCtrlMultiTimeTable(thisLastDay);
+            setCtrlMultiTimeTable(theThisLastDay);
             return;
         }
 

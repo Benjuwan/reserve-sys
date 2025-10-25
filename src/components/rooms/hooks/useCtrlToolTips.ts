@@ -17,7 +17,7 @@ export const useCtrlToolTips = () => {
         if (event.nativeEvent instanceof MouseEvent) {
             xPos = event.nativeEvent.clientX / 1.5;
         } else if (event.nativeEvent instanceof TouchEvent) {
-            xPos = event.nativeEvent.changedTouches[0].clientX;
+            xPos = event.nativeEvent.changedTouches[0].clientX / 1.5;
         }
 
         // y座標の取得
@@ -25,7 +25,7 @@ export const useCtrlToolTips = () => {
         if (event.nativeEvent instanceof MouseEvent) {
             yPos = event.nativeEvent.clientY / 1.5;
         } else if (event.nativeEvent instanceof TouchEvent) {
-            yPos = event.nativeEvent.changedTouches[0].clientY;
+            yPos = event.nativeEvent.changedTouches[0].clientY / 1.5;
         }
 
         const roomInfoToolTip: HTMLElement | null = document.querySelector('.roomInfoToolTip');
@@ -45,7 +45,7 @@ export const useCtrlToolTips = () => {
 
     // ツールチップの実行イベントリスナー（非表示）
     const leaveEventListener: () => void = () => {
-        setRoomsInfo('');
+        setRoomsInfo(undefined);
     }
 
     return { hoverEventListener, leaveEventListener }
