@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import roomStyle from "./styles/roomstyle.module.css";
 import { useAtom } from "jotai";
 import { roomsAtom, roomsInfoToolTipAtom } from "@/types/rooms-atom";
@@ -8,9 +8,11 @@ import { todoMemoAtom } from "@/types/calendar-atom";
 import About from "../common/About";
 import TimeTable from "./components/TimeTable";
 import MultiTimeTableCtrlBtns from "./components/MultiTimeTableCtrlBtns";
+import { useGetSpecificDay } from "./hooks/useGetSpecificDay";
 
 function RoomsAboutViewer() {
     const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
+
     const aboutLightBox: () => void = () => {
         setIsAboutOpen(!isAboutOpen);
     }
@@ -33,12 +35,10 @@ function Rooms() {
     const [todoMemo] = useAtom(todoMemoAtom);
     const [roomsInfo] = useAtom(roomsInfoToolTipAtom);
 
-    /* 418 hydration-error 対策 */
-    const [ctrlMultiTimeTable, setCtrlMultiTimeTable] = useState<number>(0);
-    useEffect(() => {
-        const targetToday: number = new Date().getDate();
-        setCtrlMultiTimeTable(targetToday);
-    }, []);
+    const { getToday } = useGetSpecificDay();
+    const theToday = getToday();
+
+    const [ctrlMultiTimeTable, setCtrlMultiTimeTable] = useState<number>(theToday);
 
     return (
         <section className={roomStyle.roomWrapper}>
