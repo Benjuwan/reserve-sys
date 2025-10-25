@@ -162,14 +162,6 @@
     }
 }
 
-/* スマホ・タブレット端末ではツールチップを中央配置 */
-@media screen and (max-width: 840px) {
-    .roomInfoToolTip {
-        margin: auto;
-        inset: 1;
-    }
-}
-
 /* minBlocks div の間隔調整のために 560px で指定 */
 @media screen and (min-width: 560px) {
     .timeScheduleWrapper {
