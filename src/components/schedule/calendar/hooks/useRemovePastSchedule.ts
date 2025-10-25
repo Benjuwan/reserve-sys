@@ -2,12 +2,18 @@ import { todoItemType } from "../../todoItems/ts/todoItemType";
 import { useAtom } from "jotai";
 import { todoMemoAtom } from "@/types/calendar-atom";
 import { useDeleteTodoItem } from "../../todoItems/hooks/useDeleteTodoItem";
+import { useEffect, useState } from "react";
 
 export const useRemovePastSchedule = () => {
     const [, setTodoMemo] = useAtom(todoMemoAtom);
     const { deleteReservation } = useDeleteTodoItem();
 
-    const currentDate: Date = new Date();
+    const initCurrentDate: Date = new Date();
+    const [currentDate, setCurrentDate] = useState<Date>(initCurrentDate);
+    useEffect(() => {
+        const currentDate: Date = new Date();
+        setCurrentDate(currentDate);
+    }, []);
 
     const removePastSchedule: (fetchTodoMemo: todoItemType[]) => void = (fetchTodoMemo: todoItemType[]) => {
         if (fetchTodoMemo.length > 0) {
