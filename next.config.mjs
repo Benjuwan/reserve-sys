@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        outputFileTracingIncludes: {
-            '/api/**/*': ['./node_modules/.prisma/client/**/*'],
-            '/*': ['./node_modules/.prisma/client/**/*'],
-        },
+    // Prismaのバイナリファイル(.so.node)をVercelデプロイ時に確実に含めるための設定
+    // schema.prismaの binaryTargets で生成されたファイルがデプロイパッケージに含まれるようにする
+    outputFileTracingIncludes: {
+        '/api/**/*': ['./node_modules/.prisma/client/**/*'],
+        '/*': ['./node_modules/.prisma/client/**/*'],
     },
 };
 
