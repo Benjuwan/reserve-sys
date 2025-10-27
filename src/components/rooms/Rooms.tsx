@@ -23,7 +23,7 @@ function RoomsAboutViewer() {
     );
 }
 
-function Rooms() {
+function Rooms({ theToday }: { theToday: number }) {
     const [rooms] = useAtom(roomsAtom);
 
     /**
@@ -32,9 +32,6 @@ function Rooms() {
     */
     const [todoMemo] = useAtom(todoMemoAtom);
     const [roomsInfo] = useAtom(roomsInfoToolTipAtom);
-
-    // 各種条件判定に利用するための「今日・本日」の固定値
-    const theToday = new Date().getDate();
 
     // 当月の最終日を取得する固定値
     const theThisLastDay = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
@@ -63,7 +60,7 @@ function Rooms() {
     */
 
     // タイムテーブルの表示制御に利用するための「今日・本日」の可変値
-    const [ctrlMultiTimeTable, setCtrlMultiTimeTable] = useState<number>(new Date().getDate());
+    const [ctrlMultiTimeTable, setCtrlMultiTimeTable] = useState<number>(theToday);
 
     return (
         <section className={roomStyle.roomWrapper}>
