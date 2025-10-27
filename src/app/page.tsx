@@ -3,8 +3,9 @@ import Calendar from "../components/schedule/calendar/Calendar";
 
 export default async function Home() {
   /* 418 hydration-error 対策：サーバーコンポーネントでデータ取得して子に渡す  */
-  // 各種条件判定に利用するための「今日・本日」の固定値
-  const theToday = new Date().getDate();
+  // デプロイ先のタイムゾーン設定がUTCの場合に備えてJSTの日付（今日・本日）を取得
+  const jst = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  const theToday = jst.getDate();
 
   return (
     <main>
