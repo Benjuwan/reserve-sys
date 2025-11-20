@@ -47,14 +47,14 @@
 ## 技術構成
 - @eslint/eslintrc@3.3.1
 - @prisma/client@6.19.0
-- @types/node@24.10.0
-- @types/react-dom@19.2.2
-- @types/react@19.2.2
+- @types/node@24.10.1
+- @types/react-dom@19.2.3
+- @types/react@19.2.6
 - @types/uuid@10.0.0
-- eslint-config-next@16.0.1
+- eslint-config-next@16.0.3
 - eslint@9.39.1
 - jotai@2.15.1
-- next@16.0.1
+- next@16.0.3
 - prisma@6.19.0
 - react-dom@19.2.0
 - react@19.2.0
@@ -64,65 +64,12 @@
 ---
 
 > [!NOTE]
-> ### Next.js 16 アップグレードで Prisma との連携エラーが発生
-> 
-> #### 症状
-> Next.js 16へアップグレード後、開発環境では正常に動作しビルドも成功するが、Vercelへのデプロイ後に500エラーが発生
-> 
-> #### 原因
-> Next.js 16ではファイルトレーシングが最適化され、使用されていないと判断されたファイルを積極的に除外するようになった。その結果、Prismaのバイナリファイル（`.so.node`）がデプロイパッケージから除外され、実行時にエラーが発生していた。
-> 
-> Vercelの実行環境（AWS Lambda: RHEL系、OpenSSL 3.0.x）では、`libquery_engine-rhel-openssl-3.0.x.so.node`がないとデータベースクエリを実行できない。
-> 
-> **エラーログ（Vercelダッシュボード）:**
-> ```
-> Prisma Client could not locate the Query Engine for runtime "rhel-openssl-3.0.x".
-> 
-> This is likely caused by tooling that has not copied 
-> "libquery_engine-rhel-openssl-3.0.x.so.node" to the deployment folder.
-> ```
-> 1. **Prismaが`rhel-openssl-3.0.x`というランタイムを探している** → つまり、実行環境がRHEL（Red Hat Enterprise Linux）ベースでOpenSSL 3.0.xを使用していることを示唆
-> 2. **「could not locate」= 見つからない** → バイナリファイル自体が存在しない
-> 
-> #### 対応方法
-> 
-> **1. `prisma/schema.prisma`でバイナリターゲットを指定**
-> 
-> Vercel（AWS Lambda）環境用のバイナリを生成するよう設定：
-> 
-> ```diff
-> generator client {
->   provider = "prisma-client-js"
-> + binaryTargets = ["native", "rhel-openssl-3.0.x"]
-> }
-> 
-> datasource db {
->   provider = "postgresql"
->   url      = env("DATABASE_URL")
-> }
-> ```
-> 
-> **2. `next.config.mjs`でバイナリファイルをデプロイに含める**
-> 
-> Next.js 16に対して、Prismaのバイナリファイルをデプロイパッケージに含めるよう明示的に指示：
-> 
-> ```javascript
-> /** @type {import('next').NextConfig} */
-> const nextConfig = {
->     // Prismaのバイナリファイル(.so.node)をVercelデプロイ時に確実に含めるための設定
->    // schema.prismaの binaryTargets で生成されたファイルがデプロイパッケージに含まれるようにする
->    outputFileTracingIncludes: {
->        '/api/**/*': ['./node_modules/.prisma/client/**/*'],
->        '/*': ['./node_modules/.prisma/client/**/*'],
->    },
-> };
-> 
-> export default nextConfig;
-> ```
-> 
-> #### 補足
-> - この問題はNext.js 15以前では発生していませんでした（ファイルトレーシングが寛容だったため）
-> - Vercel以外のサーバーレス環境（AWS Lambda、Google Cloud Functionsなど）でも同様の問題が発生する可能性があります
+> - Prismaクライアントを更新<br>
+> **各種ライブラリのアップデート・アップグレードを行った後に`prisma`起因で立ち上がらなかったり、ビルドできなかったり**する場合<br>
+> 以下のコマンドでPrismaクライアントを更新して対応する
+```bash
+npx prisma generate
+```
 
 ---
 
