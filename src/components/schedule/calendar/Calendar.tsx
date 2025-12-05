@@ -42,13 +42,15 @@ function Calendar() {
     useEffect(() => {
         handleCheckIsDesktopView();
         removePastSchedule(fetchTodoMemo);
+
+        // 初回マウント時のみ実行したいので以下を記述してLintエラー回避
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchTodoMemo]);
+    }, []);
 
     useEffect(() => {
         getMonthDays(ctrlYear, ctrlMonth, setDays);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ctrlMonth]);
+    }, []);
 
     return (
         <section className={calendarStyle.wrapper}>
