@@ -49,8 +49,7 @@ function Calendar() {
 
     useEffect(() => {
         getMonthDays(ctrlYear, ctrlMonth, setDays);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [getMonthDays, ctrlYear, ctrlMonth]);
 
     return (
         <section className={calendarStyle.wrapper}>
