@@ -1,7 +1,8 @@
+import { useCallback } from "react";
 import { calendarItemType } from "../ts/calendarItemType";
 
 export const useGetCalndarItem = () => {
-    const getCalendarItem: (year: number, month: number, day: number, signalPrevNextMonth?: boolean) => calendarItemType = (
+    const getCalendarItem: (year: number, month: number, day: number, signalPrevNextMonth?: boolean) => calendarItemType = useCallback((
         year: number,
         month: number,
         day: number,
@@ -56,7 +57,8 @@ export const useGetCalndarItem = () => {
             return newCalendarItem;
         }
 
-    }
+        // `getCalendarItem`は依存しているカスタムフックやデータが無いので依存配列は空指定
+    }, []);
 
     return { getCalendarItem }
 }
