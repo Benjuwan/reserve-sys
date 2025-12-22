@@ -66,20 +66,20 @@
 
 ---
 
-[!IMPORTANT]
+> [!IMPORTANT]
 > - **2025/12/22： prisma@7.2.0 と next@16.1.0 では互換性がなくビルドエラーが発生する**
 > - **問題の詳細**: Next.js 16のTurbopackがPrisma 7の生成コードに対してシンボリックリンクを作成する際、Windows環境で権限エラー(os error 1314)が発生<br>
 > 応急処置として`package.json`のビルドコマンドを`webpack`を用いる仕様に修正
-```diff
-"scripts": {
-- "dev": "next dev",
-+ "dev": "next dev --webpack",
-- "build": "prisma generate && next build",
-+ "build": "prisma generate && next build --webpack",
-  "start": "next start",
-  "lint": "eslint ."
-},
-```
+> ```diff
+> "scripts": {
+> - "dev": "next dev",
+> + "dev": "next dev --webpack",
+> - "build": "prisma generate && next build",
+> + "build": "prisma generate && next build --webpack",
+>   "start": "next start",
+>   "lint": "eslint ."
+> },
+> ```
 > しかしこれは**あくまで暫定的な応急処置なので将来のアップデートを待ちながら、次回以降のアップデート・グレードの度に`--webpack`を外したコマンドで実施**して検証していくこと。
 
 ---
