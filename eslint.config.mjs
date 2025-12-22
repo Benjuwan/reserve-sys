@@ -34,7 +34,8 @@ const eslintConfig = defineConfig([
         "out/**",           // Next.jsの静的エクスポートディレクトリ
         "node_modules/**",  // npmパッケージディレクトリ
         "build/**",         // ビルド成果物ディレクトリ
-        "dist/**"           // 配布用ディレクトリ
+        "dist/**",          // 配布用ディレクトリ
+        "src/generated/**"  // Prisma 生成コードを ESLint から除外
     ]),
 
     // Next16アップグレード時の循環エラー対策
