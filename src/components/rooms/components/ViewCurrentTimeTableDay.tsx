@@ -32,7 +32,7 @@ function ViewCurrentTimeTableDay({ ctrlMultiTimeTable }: { ctrlMultiTimeTable: n
             {(pathName.length === 1 && typeof theThisMonth === 'number') &&
                 <p>- <b>{
                     isNextMonth ?
-                        (isDec ? 1 : theThisMonth - 1) : theThisMonth
+                        (isDec ? 1 : theThisMonth + 1) : theThisMonth
                 }/{ctrlMultiTimeTable}</b> の予約内容（※7日後まで確認可能）</p>
             }
         </>
