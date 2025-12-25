@@ -53,10 +53,10 @@
 - @types/react@19.2.7
 - @types/uuid@10.0.0
 - dotenv@17.2.3
-- eslint-config-next@16.1.0
+- eslint-config-next@16.1.1
 - eslint@9.39.2
 - jotai@2.16.0
-- next@16.1.0
+- next@16.1.1
 - pg@8.16.3
 - prisma@7.2.0
 - react-dom@19.2.3
@@ -65,6 +65,11 @@
 - uuid@13.0.0
 
 ---
+
+<details>
+<summary>【解決済み】、Windows環境でのみ、prisma@7.2.0 と next@16.1.0 では互換性がなくビルドエラーが発生する件</summary>
+
+- **Next.js 16.1.1 で解消**
 
 > [!IMPORTANT]
 > - **2025/12/22： prisma@7.2.0 と next@16.1.0 では互換性がなくビルドエラーが発生する**
@@ -81,6 +86,8 @@
 > },
 > ```
 > しかしこれは**あくまで暫定的な応急処置なので将来のアップデートを待ちながら、次回以降のアップデート・グレードの度に`--webpack`を外したコマンドで実施**して検証していくこと。
+
+></details>
 
 ---
 
