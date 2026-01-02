@@ -55,7 +55,7 @@
 - dotenv@17.2.3
 - eslint-config-next@16.1.1
 - eslint@9.39.2
-- jotai@2.16.0
+- jotai@2.16.1
 - next@16.1.1
 - pg@8.16.3
 - prisma@7.2.0
