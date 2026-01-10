@@ -48,9 +48,9 @@
 - @eslint/eslintrc@3.3.3
 - @prisma/adapter-pg@7.2.0
 - @prisma/client@7.2.0
-- @types/node@25.0.3
+- @types/node@25.0.5
 - @types/react-dom@19.2.3
-- @types/react@19.2.7
+- @types/react@19.2.8
 - @types/uuid@10.0.0
 - dotenv@17.2.3
 - eslint-config-next@16.1.1
