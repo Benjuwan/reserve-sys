@@ -57,7 +57,7 @@
 - eslint@9.39.2
 - jotai@2.17.0
 - next@16.1.6
-- pg@8.17.2
+- pg@8.18.0
 - prisma@7.3.0
 - react-dom@19.2.4
 - react@19.2.4

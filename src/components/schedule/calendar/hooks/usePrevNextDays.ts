@@ -45,8 +45,6 @@ export const usePrevNextDays = () => {
         const theCalendar: calendarItemType[] = [...targetPrevDays, ...dayDateBox, ...targetNextDays];
 
         return theCalendar
-
-        // `prevNextDays`は以下カスタムフックに依存しているので依存配列に指定
     }, [getCalendarItem]);
 
     return { prevNextDays }

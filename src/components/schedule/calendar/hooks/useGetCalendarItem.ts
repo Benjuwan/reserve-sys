@@ -56,8 +56,6 @@ export const useGetCalndarItem = () => {
             }
             return newCalendarItem;
         }
-
-        // `getCalendarItem`は依存しているカスタムフックやデータが無いので依存配列は空指定
     }, []);
 
     return { getCalendarItem }

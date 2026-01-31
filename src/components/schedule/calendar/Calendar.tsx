@@ -24,12 +24,6 @@ function Calendar() {
     const { getMonthDays } = useGetMonthDays();
     const { removePastSchedule } = useRemovePastSchedule();
 
-    const handleCheckIsDesktopView: () => void = () => {
-        if (window.matchMedia("(min-width: 1025px)").matches) {
-            setDesktopView(true);
-        }
-    }
-
     const jumpThisMonth: () => void = () => {
         const thisYear: number = new Date().getFullYear();
         const thisMonth: number = new Date().getMonth() + 1;
@@ -40,10 +34,13 @@ function Calendar() {
     }
 
     useEffect(() => {
-        handleCheckIsDesktopView();
         removePastSchedule(fetchTodoMemo);
 
-        // 初回マウント時のみ実行したいので以下を記述してLintエラー回避
+        if (window.matchMedia("(min-width: 1025px)").matches) {
+            setDesktopView(true);
+        }
+
+        //「初回マウントだけ実行したい」ため以下を記述
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
