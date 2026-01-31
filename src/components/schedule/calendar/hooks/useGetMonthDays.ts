@@ -23,8 +23,6 @@ export const useGetMonthDays = () => {
 
         const theCalendar: calendarItemType[] = prevNextDays(year, month, dayDateBox);
         setDays(theCalendar);
-
-        // `useGetMonthDays`は以下の2つのカスタムフックに依存しているので依存配列に指定
     }, [getCalendarItem, prevNextDays]);
 
     return { getMonthDays }
