@@ -1,16 +1,20 @@
 ## Reserve-Sys
-[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリの派生ver（`prisma`×`postgreSQL`）<br><br>
-任意の部屋数を用意するとともに、各部屋ごとの予約を視覚的に把握及び管理・編集できる「会議室予約システムUI」です。<br>`prisma`×`postgreSQL(vercel)`で予約内容を管理しています。<br>
+[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリの派生ver（`prisma`×`postgreSQL`）    
+任意の部屋数を用意するとともに、各部屋ごとの予約を視覚的に把握及び管理・編集できる「会議室予約システムUI」です。  
+`prisma`×`postgreSQL(vercel)`で予約内容を管理しています。  
 
-- `src/app/types/rooms-atom.ts`<br>
+- `src/app/types/rooms-atom.ts`  
 部屋数と予約可能時間の設定ファイル。変更・修正するたびにビルドすること（※残っている予約データに注意）
 
 ### 仕様紹介
-以下の仕様に関しては[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリと同様です。<br><br>
+以下の仕様に関しては[reserve-sys-sqlite](https://github.com/Benjuwan/reserve-sys-sqlite)リポジトリと同様です。    
 
-- 予約内容の重複禁止<br>他の方が先に予約している場合は受け付けません。
-- 予約時間外は受付不可<br>「`timeBlockBegin`時～`timeBlockEnd`時（※）」の時間帯で予約できます。各部屋ごとのタイムテーブルには当日分の予約内容が反映されます。<br>※：`src/app/types/rooms-atom.ts`の`timeBlockBegin`と`timeBlockEnd`から値を取得
-- 過去の予約内容は随時削除<br>当日以前の過去予約内容は削除（※）されます。<br>※：`src/components/schedule/calendar/hooks/useRemovePastSchedule.ts`での`deleteReservation`処理にて実行
+- 予約内容の重複禁止  
+他の方が先に予約している場合は受け付けません。
+- 予約時間外は受付不可  「`timeBlockBegin`時～`timeBlockEnd`時（※）」の時間帯で予約できます。各部屋ごとのタイムテーブルには当日分の予約内容が反映されます。  
+※：`src/app/types/rooms-atom.ts`の`timeBlockBegin`と`timeBlockEnd`から値を取得
+- 過去の予約内容は随時削除  当日以前の過去予約内容は削除（※）されます。  
+※：`src/components/schedule/calendar/hooks/useRemovePastSchedule.ts`での`deleteReservation`処理にて実行
 
 #### 予約方法
 <img width="948" alt="スケジュール欄の日付にあるアイコンをクリック" src="https://github.com/user-attachments/assets/38353bee-9797-4b3d-a228-70ec86d01b84" />
@@ -79,7 +83,7 @@
 > - **注意:** `npm audit fix --force` を実行すると、Prisma が **v7 から v6 へ強制的にダウングレード**され、破壊的変更が発生するため実行しないでください。
 >
 > **一時的な回避策:**
-> Prisma 側のアップデートを待つ間、`package.json` に以下の `overrides` を追加することで警告を解消。<br>
+> Prisma 側のアップデートを待つ間、`package.json` に以下の `overrides` を追加することで警告を解消。  
 > **今後、Prisma のマイナーアップデート（v7.2.0 など）がリリースされたタイミングで、一度`overrides`を外して`npm audit`を実行し、公式に修正されたか確認してみること**
 
 ```diff
@@ -102,7 +106,7 @@
 
 > [!IMPORTANT]
 > - **2025/12/22： prisma@7.2.0 と next@16.1.0 では互換性がなくビルドエラーが発生する**
-> - **問題の詳細**: Next.js 16のTurbopackがPrisma 7の生成コードに対してシンボリックリンクを作成する際、Windows環境で権限エラー(os error 1314)が発生<br>
+> - **問題の詳細**: Next.js 16のTurbopackがPrisma 7の生成コードに対してシンボリックリンクを作成する際、Windows環境で権限エラー(os error 1314)が発生  
 > 応急処置として`package.json`のビルドコマンドを`webpack`を用いる仕様に修正
 > ```diff
 > "scripts": {
@@ -121,8 +125,8 @@
 ---
 
 > [!NOTE]
-> - Prismaクライアントを更新<br>
-> **各種ライブラリのアップデート・アップグレードを行った後に`prisma`起因で立ち上がらなかったり、ビルドできなかったり**する場合<br>
+> - Prismaクライアントを更新  
+> **各種ライブラリのアップデート・アップグレードを行った後に`prisma`起因で立ち上がらなかったり、ビルドできなかったり**する場合  
 > 以下のコマンドでPrismaクライアントを更新して対応する
 ```bash
 npx prisma generate
@@ -133,7 +137,7 @@ npx prisma generate
 > [!NOTE]
 > - `npm audit`で定期的に脆弱性のチェックを行う
 > - `npm update`で定期的に（互換性を維持した）更新を行う
->   - `^`（キャレット：「指定されたバージョンからメジャーバージョンを変更しない範囲で最新のバージョンまでを許容」する機能を示す記号）が付いていても油断せず定期的にチェックする<br>例：`"next": "^14.2.12"`の場合、14.2.12以上 15.0.0未満のバージョンが許容される
+>   - `^`（キャレット：「指定されたバージョンからメジャーバージョンを変更しない範囲で最新のバージョンまでを許容」する機能を示す記号）が付いていても油断せず定期的にチェックする  例：`"next": "^14.2.12"`の場合、14.2.12以上 15.0.0未満のバージョンが許容される
 > - `npm outdated`で表示される`Current`と`Wanted`の内容が等しいのが望ましい
 > - 特定ライブラリを最新にするには`npm install ライブラリ名@latest`コマンドを実行する
 
@@ -177,15 +181,15 @@ npx prisma generate
 > ```
 
 4. `.env`, `.env.local`の設定をはじめ、Vercel での環境変数の設定も行う
-- `.env`<br>
-`.env`は`npx prisma studio`の実行（`prisma studio`の起動）に必要なので用意する。<br>※`prisma studio`は`GUI`でテーブル操作できる`prisma`の機能の一つ。`GUI`でパパっと手っ取り早くテーブル操作したい場合に便利です。<br><br>
+- `.env`  
+`.env`は`npx prisma studio`の実行（`prisma studio`の起動）に必要なので用意する。  ※`prisma studio`は`GUI`でテーブル操作できる`prisma`の機能の一つ。`GUI`でパパっと手っ取り早くテーブル操作したい場合に便利です。    
 
 `DATABASE_URL`は[ Vercel ダッシュボード]-[当該プロジェクト名]-[Storage]ページの`Quickstart`欄で確認する
 ```
 DATABASE_URL=postgres://...
 ```
 
-- `.env.local`<br>
+- `.env.local`  
 必要な各種環境変数の管理
 ```
 # NEXT_PUBLIC を前置した環境変数は露出するので注意（今回は Route Handlers の APIエンドポイントのドメインとして使用）
@@ -241,14 +245,14 @@ model Reservation {
 ```
 
 ### Vercel デプロイ時に`prisma`起因のエラー
-- `prisma`起因のエラー<br>
+- `prisma`起因のエラー  
 Vercel の「`Node.js`の依存関係をキャッシュ」する働きによって「古い`Prisma Client`が使用されてしまって」デプロイエラーになっていた。（＝`Prisma Client`の自動生成が正しく実行されていなかった）
 
 ```
 Error [PrismaClientInitializationError]: Prisma has detected that this project was built on Vercel, which caches dependencies. This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered. To fix this, make sure to run the `prisma generate` command during the build process.
 ```
 
-- 解決策<br>
+- 解決策  
 `build`時に`prisma generate`で`Prisma Client`を新規制作するように変更する
 
 ```diff
@@ -265,16 +269,16 @@ Error [PrismaClientInitializationError]: Prisma has detected that this project w
 ```
 
 ## 異なる開発環境（別PC）で作業する場合
-前提として`.vercel`フォルダをはじめ、各種環境変数（`.env`, `.env.local`）の設定を行わなければならない。これらの設定を通じて Vercel（を通じて連携しているデータベース`postgresql`）に接続し、開発環境を整えることができる。<br>
+前提として`.vercel`フォルダをはじめ、各種環境変数（`.env`, `.env.local`）の設定を行わなければならない。これらの設定を通じて Vercel（を通じて連携しているデータベース`postgresql`）に接続し、開発環境を整えることができる。  
 
 1. [`Vercel CLI`](https://vercel.com/docs/cli)をインストール
 ```bash
 npm i -g vercel
 ```
  - 上記コマンドを権限制限により実行できない（インストール許可がされない）場合は
-   - windows<br>
+   - windows  
    `vscode`のターミナルではなく`コマンドプロンプト`で実行してみる。それでもできない場合は以下に進む（`vscode`利用）
-   - Mac<br>
+   - Mac  
      1. `vscode`を開いて`com/ctrl + shift + p`で表示される入力項目に`Shell`と打鍵し、`シェルコマンド:PATH内に'code'コマンドをインストールします`を選択。選択後は画面に表示されるフロー通り許可してインストールを進めていく。
      2. 以下のフローを進める
         - グローバルパッケージのインストール先ディレクトリを確認。通常`/usr/local`や`/usr/lib/node_modules`など管理者権限が必要な場所が表示される。
@@ -288,7 +292,7 @@ npm i -g vercel
         npm config set prefix '~/.npm-global'
         ```
 
-        - 環境設定： `~/.zshrc`や`~/.bashrc`など、使用しているシェルの設定ファイル末尾に`export PATH=~/.npm-global/bin:$PATH`を追加。<br>`nano ~/.zshrc`で当該ファイルを開ける
+        - 環境設定： `~/.zshrc`や`~/.bashrc`など、使用しているシェルの設定ファイル末尾に`export PATH=~/.npm-global/bin:$PATH`を追加。  `nano ~/.zshrc`で当該ファイルを開ける
         ```bash
         export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
@@ -317,7 +321,7 @@ npm i -g vercel
      vercel logout
      ```
 
-     4. 環境変数の設定<br>
+     4. 環境変数の設定  
      データベース接続に必要な環境変数を、 Vercel ダッシュボードで確認し、ローカル環境の`.env`, `.env.local`ファイルに設定。
      5. Vercel（を通じて連携しているデータベース`postgresql`）に接続
      6. 以下注釈内容（`npx prisma db push`または`npx prisma migrate dev`）でデータベース（の中身）を反映
@@ -339,9 +343,9 @@ npm i -g vercel
   - `db push`ではこのような安全性は確保できません
 
 > [!NOTE]  
-> - 上記フローを経ても予約登録機能が動かない場合<br>
-> 異なる開発環境（別PC）に更新内容を反映させる場合の注意事項です。<br>
-> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。<br> WindowsPC でコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
+> - 上記フローを経ても予約登録機能が動かない場合  
+> 異なる開発環境（別PC）に更新内容を反映させる場合の注意事項です。  
+> 上記フローを経て、`git pull origin main`で当該リモートリポジトリと整合性を取ったのに**予約登録機能が動かない**場合は以下のコマンドを`ターミナル`で打つ。   WindowsPC でコマンドを実行した際に権限上のエラーが発生した場合は`コマンドプロンプト`で再度試してみる。
 > ```bash
 > # Prismaクライアントを更新して新しいスキーマを反映
 > npx prisma generate
@@ -349,8 +353,8 @@ npm i -g vercel
 
 ## データベースの仕様（テーブル）更新
 登録内容を変更したい場合、以下フローを実行する必要がある。
-- `prisma/schema.prisma`<br>`model`オブジェクトの内容を編集（登録内容を追加・削除）
-- `prisma/schema.prisma`の`model`オブジェクト編集後、以下のコマンドをターミナルに打つ<br>
+- `prisma/schema.prisma`  `model`オブジェクトの内容を編集（登録内容を追加・削除）
+- `prisma/schema.prisma`の`model`オブジェクト編集後、以下のコマンドをターミナルに打つ  
 ```bash
 # マイグレーションファイルを作成し、データベースに変更を適用
 npx prisma migrate dev --name what_you_changed # --name 以降は任意の命名
@@ -360,18 +364,18 @@ npx prisma generate
 ```
 
 > [!NOTE]  
-> - `prisma/dev.db-journal`<br>`dev.db-journal`という設定中のデータベース（今回は`postgresql`）の内部処理用ファイルが自動的に生成・削除されるが無視して構わない。<br>`dev.db-journal`は`postgresql`が自動的に管理する`postgresql`のトランザクションログファイルで、データベース操作の一時的な記録を保持している。
+> - `prisma/dev.db-journal`  `dev.db-journal`という設定中のデータベース（今回は`postgresql`）の内部処理用ファイルが自動的に生成・削除されるが無視して構わない。  `dev.db-journal`は`postgresql`が自動的に管理する`postgresql`のトランザクションログファイルで、データベース操作の一時的な記録を保持している。
 
 ### その他の更新・修正が必要なファイル
 ※以下の更新・修正は本リポジトリにおいてのみ適用されるもので一般的なものではありません
 
-- `src/app/components/schedule/todoItems/ts/todoItemType.ts`<br>登録内容の型情報を編集
+- `src/app/components/schedule/todoItems/ts/todoItemType.ts`  登録内容の型情報を編集
 - `src/app/components/schedule/todoItems/TodoForm.tsx`
   - `todoItems`ステートの初期値である`initTodoItems`オブジェクトを編集（オブジェクトに当該登録内容であるプロパティ・キーを追加・削除）
   - （変更した）当該登録内容に関する入力フォームを（`src/app/components/schedule/todoItems/utils`配下に）用意または調整
-- `src/app/api/reservations/`配下の`Route Handlers`の登録内容を編集<br>
+- `src/app/api/reservations/`配下の`Route Handlers`の登録内容を編集  
 （※[前述のprismaデータベース更新フロー](#データベースの仕様テーブル更新)が済んでいないと進まないので注意）
-  - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）<br>
+  - `POST`, `PUT`に関する`data`オブジェクト内を編集（例：プロパティ・キーの追加など）  
   ※`data`オブジェクト編集後に型エラーが表示される場合は一旦`VSCode`を閉じてみる
 
 ## Vercel Postgres 関連情報
