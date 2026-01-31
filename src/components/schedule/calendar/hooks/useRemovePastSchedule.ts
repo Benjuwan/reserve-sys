@@ -31,7 +31,8 @@ export const useRemovePastSchedule = () => {
                     return true;
                 } else {
                     /* 過去分はDBから削除 */
-                    console.warn(`過去判定による削除スケジュール | ${memo}`);
+                    console.warn("▼ 過去判定による削除対象スケジュール");
+                    console.warn(memo);
                     deleteReservation(memo.id);
                     return false; // 明示的に false を返す
                 }
