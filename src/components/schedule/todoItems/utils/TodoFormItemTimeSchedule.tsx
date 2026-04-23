@@ -1,19 +1,26 @@
 import todoStyle from "../styles/todoStyle.module.css";
-import { SyntheticEvent, Dispatch, memo, RefObject, SetStateAction } from "react";
+import { SyntheticEvent, Dispatch, memo, SetStateAction, useEffect } from "react";
 import { todoItemType } from "../ts/todoItemType";
 import { useCheckTimeValidation } from "../hooks/useCheckTimeValidation";
 import { useHandleFormEntries } from "@/hooks/useHandleFormEntries";
 
-function TodoFormItemTimeSchedule({ todoItems, setTodoItems, validationTxtRef }: {
+function TodoFormItemTimeSchedule({ todoItems, setTodoItems, setValidationTxt, validationTxt }: {
     todoItems: todoItemType,
     setTodoItems: Dispatch<SetStateAction<todoItemType>>,
-    validationTxtRef?: RefObject<string>
+    setValidationTxt: (txt: string) => void,
+    validationTxt: string
 }) {
     const { checkTimeValidation } = useCheckTimeValidation();
     const { handleFormEntries } = useHandleFormEntries();
 
+    useEffect(() => {
+        // Effect 内で State 更新関数を内包した関数を実行しているがLintエラーは発生しない
+        // 理由： Lint はコードの文脈から「このStateは不要では？」と判断した上で警告を出すため ＝ 今回の実装内容およびロジックの場合は『確かにState更新関数がEffect内で必要だな』と判断されてスルー（許可）されている
+        checkTimeValidation(todoItems, setValidationTxt, validationTxt);
+    }, [todoItems, setValidationTxt, validationTxt, checkTimeValidation]);
+
     const handleTimeSchedule: (e: SyntheticEvent<HTMLInputElement>) => void = (e: SyntheticEvent<HTMLInputElement>) => {
-        checkTimeValidation(todoItems, validationTxtRef);
+        checkTimeValidation(todoItems, setValidationTxt, validationTxt);
         handleFormEntries<todoItemType>(e, todoItems, setTodoItems);
     }
 
