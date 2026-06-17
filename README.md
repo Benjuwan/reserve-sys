@@ -52,20 +52,20 @@
 - @eslint/eslintrc@3.3.5
 - @prisma/adapter-pg@7.8.0
 - @prisma/client@7.8.0
-- @types/node@25.8.0
+- @types/node@25.9.3
 - @types/react-dom@19.2.3
-- @types/react@19.2.14
+- @types/react@19.2.17
 - @types/uuid@10.0.0
 - dotenv@17.4.2
-- eslint-config-next@16.2.6
+- eslint-config-next@16.2.9
 - eslint@9.39.4
-- jotai@2.20.0
-- next@16.2.6
-- pg@8.20.0
+- jotai@2.20.1
+- next@16.2.9
+- pg@8.21.0
 - prisma@7.8.0
-- react-dom@19.2.6
-- react@19.2.6
-- typescript@5.9.3
+- react-dom@19.2.7
+- react@19.2.7
+- typescript@6.0.3
 - uuid@14.0.0
 
 ---
