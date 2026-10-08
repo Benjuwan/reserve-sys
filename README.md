@@ -49,22 +49,24 @@
 ---
 
 ## 技術構成
-- @eslint/eslintrc@3.3.6
-- @prisma/adapter-pg@7.9.1
-- @prisma/client@7.9.1
-- @types/node@26.2.0
-- @types/react-dom@19.2.4
-- @types/react@19.2.18
+- @eslint/eslintrc@3.3.7
+- @prisma/adapter-pg@7.10.0
+- @prisma/client@7.10.0
+- @types/node@26.6.4
+- @types/react-dom@19.3.0
+- @types/react@19.3.0
 - @types/uuid@10.0.0
+- @typescript-eslint/eslint-plugin@8.70.0
+- @typescript-eslint/parser@8.70.0
 - dotenv@17.4.2
-- eslint-config-next@16.3.1
+- eslint-config-next@16.4.0
 - eslint@9.39.5
-- jotai@2.20.2
-- next@16.3.1
-- pg@8.23.0
-- prisma@7.9.1
-- react-dom@19.2.8
-- react@19.2.8
+- jotai@3.0.1
+- next@16.4.0
+- pg@8.23.1
+- prisma@7.10.0
+- react-dom@19.3.0
+- react@19.3.0
 - typescript@6.0.3
 - uuid@14.0.2
 
